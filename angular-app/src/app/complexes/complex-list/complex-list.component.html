@@ -1,0 +1,27 @@
+<div class="complex-list-container">
+  <div class="header">
+    <h2>Residental Complexes</h2>
+    <div>
+      <button (click)="goToCreate()">Add Complex</button>
+      <button (click)="goBack()">Back</button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Identity</th>
+        <th>Address</th>
+        <th>Campaign Start</th>
+        <th>Campaign End</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let complex of complexes">
+        <td>{{ complex.identity }}</td>
+        <td>{{ complex.address }}</td>
+        <td>{{ complex.campaign_start || "N/A" }}</td>
+        <td>{{ complex.campaign_end || "N/A" }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,46 @@
+<div class="admin-list-container">
+  <div class="header">
+    <h2>Admin Management</h2>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+  <div class="actions">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search by name or email..."
+      (keyup)="onSearch()"
+    />
+    <button (click)="onSearch()">Search</button>
+    <button *ngIf="isSuperAdmin" (click)="goToCreate()">Add Admin</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let admin of admins">
+        <td>
+          {{ admin.civility }} {{ admin.first_name }} {{ admin.last_name }}
+        </td>
+        <td>{{ admin.email }}</td>
+        <td>{{ admin.role }}</td>
+        <td>{{ admin.status }}</td>
+        <td>{{ admin.phone || "N/A" }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage == 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage == totalPages">
+      Next
+    </button>
+  </div>
+</div>

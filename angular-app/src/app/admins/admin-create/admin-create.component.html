@@ -1,0 +1,63 @@
+<div class="create-container">
+  <h2>Create New Admin</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Civility</label>
+      <select name="civility" [(ngModel)]="admin.civility">
+        <option value="Mr">Mr</option>
+        <option value="Ms">Ms</option>
+        <option value="Dr">Dr</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>First Name</label>
+      <input
+        type="text"
+        [(ngModel)]="admin.first_name"
+        name="first_name"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Last Name</label>
+      <input
+        type="text"
+        [(ngModel)]="admin.last_name"
+        name="last_name"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="admin.email" name="email" required />
+    </div>
+    <div class="form-group">
+      <label> Phone </label>
+      <input type="text" name="phone" [(ngModel)]="admin.phone" />
+    </div>
+    <div class="form-group">
+      <label>Role</label>
+      <select name="role" [(ngModel)]="admin.role">
+        <option value="Super Admin">Super Admin</option>
+        <option value="Complex Admin">Complex Admin</option>
+        <option value="Building Admin">Building Admin</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label> Password </label>
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="admin.password"
+        required
+      />
+    </div>
+    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="success" *ngIf="successMessage">{{ successMessage }}</div>
+
+    <div class="buttons">
+      <button type="submit">Create Admin</button>
+      <button type="button" (click)="goBack()">Cancel</button>
+    </div>
+  </form>
+</div>

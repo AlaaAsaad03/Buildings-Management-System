@@ -1,0 +1,41 @@
+<div class="building-list-conatiner">
+  <div class="header">
+    <h2>Buildings</h2>
+    <div>
+      <button (click)="gotToCreate()">Add Building</button>
+      <button (click)="goBack()">Back</button>
+    </div>
+  </div>
+  <div class="filter">
+    <label> Filter By Complex: </label>
+    <select [(ngModel)]="selectedComplexId" (change)="onFilterChange()">
+      <option [ngValue]="null">All Complexes</option>
+      <option *ngFor="let complex of complexes" [ngValue]="complex.id">
+        {{ complex.identity }}
+      </option>
+    </select>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Identity</th>
+        <th>Complex ID</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let building of buildings">
+        <td>{{ building.name }}</td>
+        <td>{{ building.address || "N/A" }}</td>
+        <td>{{ building.complex_id }}</td>
+        <td>
+          <button class="delete-btn" (click)="deleteBuilding(building.id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
