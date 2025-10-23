@@ -130,15 +130,6 @@ ng serve
 # Access at http://localhost:4200
 ```
 
----
-
-## 🖼️ Demo GIF / Screenshots
-
-![Login + Dashboard Demo](https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif)
-*Replace with your own demo GIF showing login → dashboard → CRUD flow*
-
----
-
 ## 📌 Postman Collection
 
 Test all endpoints:
@@ -163,6 +154,6 @@ Test all endpoints:
 ## 📌 Author
 
 **Alaa Asaad** — Full-Stack Developer
-[GitHub](https://github.com/yourusername) | [LinkedIn](https://linkedin.com/in/yourprofile)
+[GitHub](https://github.com/AlaaAsaad03) | [LinkedIn](www.linkedin.com/in/alaa-asaad-505740355)
 
 ---
