@@ -1,0 +1,264 @@
+<app-layout title="Dashboard" subtitle="Welcome back! Here's what's happening.">
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card" routerLink="/admins">
+      <div class="stat-icon purple">
+        <mat-icon>people</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Admins</div>
+        <div class="stat-value">{{ adminCount }}</div>
+        <div class="stat-change positive">
+          <mat-icon>trending_up</mat-icon>
+          <span>View all</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card" routerLink="/complexes">
+      <div class="stat-icon blue">
+        <mat-icon>location_city</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Complexes</div>
+        <div class="stat-value">{{ complexCount }}</div>
+        <div class="stat-change positive">
+          <mat-icon>trending_up</mat-icon>
+          <span>View all</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card" routerLink="/buildings">
+      <div class="stat-icon green">
+        <mat-icon>business</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Buildings</div>
+        <div class="stat-value">{{ buildingCount }}</div>
+        <div class="stat-change positive">
+          <mat-icon>trending_up</mat-icon>
+          <span>View all</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Quick Actions</h2>
+      <p class="section-subtitle">Common tasks to get you started</p>
+    </div>
+
+    <div class="action-cards">
+      <button class="action-card" routerLink="/complexes/create">
+        <div class="action-icon blue">
+          <mat-icon>add_business</mat-icon>
+        </div>
+        <div class="action-content">
+          <div class="action-title">Create Complex</div>
+          <div class="action-description">Add a new residential complex</div>
+        </div>
+        <mat-icon class="action-arrow">arrow_forward</mat-icon>
+      </button>
+
+      <button class="action-card" routerLink="/buildings/create">
+        <div class="action-icon green">
+          <mat-icon>add_home</mat-icon>
+        </div>
+        <div class="action-content">
+          <div class="action-title">Create Building</div>
+          <div class="action-description">Add a building to a complex</div>
+        </div>
+        <mat-icon class="action-arrow">arrow_forward</mat-icon>
+      </button>
+
+      <button
+        *ngIf="isSuperAdmin"
+        class="action-card"
+        routerLink="/admins/create"
+      >
+        <div class="action-icon purple">
+          <mat-icon>person_add</mat-icon>
+        </div>
+        <div class="action-content">
+          <div class="action-title">Create Admin</div>
+          <div class="action-description">Add a new administrator</div>
+        </div>
+        <mat-icon class="action-arrow">arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Getting Started - Dynamic -->
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Getting Started</h2>
+        <p class="section-subtitle">
+          <span *ngIf="!isFullySetup"
+            >Complete these steps to fully set up your system</span
+          >
+          <span *ngIf="isFullySetup"
+            >🎉 All set up! Your system is ready to use</span
+          >
+        </p>
+      </div>
+      <div class="progress-badge" [ngClass]="{ completed: isFullySetup }">
+        <mat-icon>{{ isFullySetup ? "check_circle" : "pending" }}</mat-icon>
+        <span>{{ completionPercentage }}% Complete</span>
+      </div>
+    </div>
+
+    <div class="checklist-card">
+      <!-- Step 1: Account Created (Always completed) -->
+      <div class="checklist-item completed">
+        <div class="checklist-icon">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="checklist-content">
+          <div class="checklist-title">Account Created</div>
+          <div class="checklist-description">
+            Your admin account is active and ready
+          </div>
+        </div>
+        <div class="checklist-badge">Completed</div>
+      </div>
+
+      <!-- Step 2: Create Complex -->
+      <div
+        class="checklist-item"
+        [ngClass]="{ completed: hasComplexes, pending: !hasComplexes }"
+      >
+        <div class="checklist-icon">
+          <mat-icon>{{
+            hasComplexes ? "check_circle" : "radio_button_unchecked"
+          }}</mat-icon>
+        </div>
+        <div class="checklist-content">
+          <div class="checklist-title">
+            {{ hasComplexes ? "Complex Created" : "Create Your First Complex" }}
+          </div>
+          <div class="checklist-description">
+            <span *ngIf="!hasComplexes"
+              >Start by adding a residential complex to manage</span
+            >
+            <span *ngIf="hasComplexes"
+              >You have {{ complexCount }} complex{{
+                complexCount !== 1 ? "es" : ""
+              }}</span
+            >
+          </div>
+        </div>
+        <button
+          *ngIf="!hasComplexes"
+          mat-raised-button
+          color="primary"
+          routerLink="/complexes/create"
+        >
+          Create
+        </button>
+        <div *ngIf="hasComplexes" class="checklist-badge">Completed</div>
+      </div>
+
+      <!-- Step 3: Add Buildings -->
+      <div
+        class="checklist-item"
+        [ngClass]="{
+          completed: hasBuildings,
+          pending: !hasBuildings,
+          disabled: !hasComplexes
+        }"
+      >
+        <div class="checklist-icon">
+          <mat-icon>{{
+            hasBuildings ? "check_circle" : "radio_button_unchecked"
+          }}</mat-icon>
+        </div>
+        <div class="checklist-content">
+          <div class="checklist-title">
+            {{ hasBuildings ? "Buildings Added" : "Add Buildings" }}
+          </div>
+          <div class="checklist-description">
+            <span *ngIf="!hasBuildings && hasComplexes"
+              >Add buildings to your residential complexes</span
+            >
+            <span *ngIf="!hasBuildings && !hasComplexes"
+              >Create a complex first before adding buildings</span
+            >
+            <span *ngIf="hasBuildings"
+              >You have {{ buildingCount }} building{{
+                buildingCount !== 1 ? "s" : ""
+              }}</span
+            >
+          </div>
+        </div>
+        <button
+          *ngIf="!hasBuildings && hasComplexes"
+          mat-raised-button
+          color="primary"
+          routerLink="/buildings/create"
+        >
+          Add Building
+        </button>
+        <div *ngIf="hasBuildings" class="checklist-badge">Completed</div>
+      </div>
+
+      <!-- Step 4: Invite Team Members (Super Admin only) -->
+      <div
+        *ngIf="isSuperAdmin"
+        class="checklist-item"
+        [ngClass]="{
+          completed: hasMultipleAdmins,
+          pending: !hasMultipleAdmins
+        }"
+      >
+        <div class="checklist-icon">
+          <mat-icon>{{
+            hasMultipleAdmins ? "check_circle" : "radio_button_unchecked"
+          }}</mat-icon>
+        </div>
+        <div class="checklist-content">
+          <div class="checklist-title">
+            {{
+              hasMultipleAdmins ? "Team Members Added" : "Invite Team Members"
+            }}
+          </div>
+          <div class="checklist-description">
+            <span *ngIf="!hasMultipleAdmins"
+              >Add more admins to help manage the system</span
+            >
+            <span *ngIf="hasMultipleAdmins"
+              >You have {{ adminCount }} admin{{
+                adminCount !== 1 ? "s" : ""
+              }}
+              in your team</span
+            >
+          </div>
+        </div>
+        <button
+          *ngIf="!hasMultipleAdmins"
+          mat-raised-button
+          color="primary"
+          routerLink="/admins/create"
+        >
+          Invite
+        </button>
+        <div *ngIf="hasMultipleAdmins" class="checklist-badge">Completed</div>
+      </div>
+
+      <!-- Celebration Message (When all done) -->
+      <div *ngIf="isFullySetup" class="celebration-box">
+        <mat-icon>celebration</mat-icon>
+        <div>
+          <strong>Congratulations!</strong>
+          <p>
+            Your system is fully configured and ready to use. You can now manage
+            your residential complexes efficiently.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

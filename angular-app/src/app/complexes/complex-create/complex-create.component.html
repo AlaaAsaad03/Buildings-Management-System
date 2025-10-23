@@ -1,82 +1,150 @@
-<div class="create-container">
-  <h2>Create New Residential Complex</h2>
+<app-layout title="Create Complex" subtitle="Add a new residential complex">
+  <div header-actions>
+    <button mat-stroked-button (click)="goBack()">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+  </div>
 
-  <form (ngSubmit)="onSubmit()">
-    <h3>Complex Information</h3>
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()" class="modern-form">
+      <!-- Complex Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>location_city</mat-icon>
+          Complex Information
+        </h3>
 
-    <div class="form-group">
-      <label> Identity </label>
-      <input
-        type="text"
-        [(ngModel)]="complex.identity"
-        name="identity"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label> Address </label>
-      <input
-        type="text"
-        [(ngModel)]="complex.address"
-        name="address"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label> Campaign Start </label>
-      <input
-        type="date"
-        [(ngModel)]="complex.campaign_start"
-        name="campaign_start"
-        required
-      />
-    </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Identity</mat-label>
+            <input
+              matInput
+              [(ngModel)]="complex.identity"
+              name="identity"
+              required
+            />
+            <mat-hint>Unique identifier for this complex</mat-hint>
+          </mat-form-field>
+        </div>
 
-    <div class="form-group">
-      <label> Campaign End </label>
-      <input
-        type="date"
-        [(ngModel)]="complex.campaign_end"
-        name="campaign_end"
-        required
-      />
-    </div>
-    <h3>Complex Admin Information</h3>
-    <div class="form-group">
-      <label> First Name </label>
-      <input
-        type="text"
-        [(ngModel)]="complex.first_name"
-        name="first_name"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label> Last Name </label>
-      <input
-        type="text"
-        [(ngModel)]="complex.last_name"
-        name="last_name"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label> Email </label>
-      <input type="email" [(ngModel)]="complex.email" name="email" required />
-    </div>
-    <div class="form-group">
-      <label> Phone </label>
-      <input type="text" [(ngModel)]="complex.phone" name="phone" required />
-    </div>
-    <div class="error" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
-    <div class="success" *ngIf="successMessage">
-      {{ successMessage }}
-    </div>
-    <div class="buttons">
-      <button type="submit">Create Complex</button>
-      <button type="button" (click)="goBack()">Cancel</button>
-    </div>
-  </form>
-</div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Address</mat-label>
+            <textarea
+              matInput
+              [(ngModel)]="complex.address"
+              name="address"
+              required
+              rows="3"
+            ></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row two-columns">
+          <mat-form-field appearance="outline">
+            <mat-label>Campaign Start Date</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="complex.campaign_start"
+              name="campaign_start"
+            />
+            <mat-icon matPrefix>event</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Campaign End Date</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="complex.campaign_end"
+              name="campaign_end"
+            />
+            <mat-icon matPrefix>event</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Admin Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>person</mat-icon>
+          Complex Administrator
+        </h3>
+        <p class="section-subtitle">
+          This person will manage the residential complex
+        </p>
+
+        <div class="form-row two-columns">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              [(ngModel)]="complex.first_name"
+              name="first_name"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              [(ngModel)]="complex.last_name"
+              name="last_name"
+              required
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="form-row two-columns">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              type="email"
+              [(ngModel)]="complex.email"
+              name="email"
+              required
+            />
+            <mat-icon matPrefix>email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input
+              matInput
+              type="tel"
+              [(ngModel)]="complex.phone"
+              name="phone"
+            />
+            <mat-icon matPrefix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="message error-message" *ngIf="errorMessage">
+        <mat-icon>error</mat-icon>
+        {{ errorMessage }}
+      </div>
+
+      <div class="message success-message" *ngIf="successMessage">
+        <mat-icon>check_circle</mat-icon>
+        {{ successMessage }}
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button mat-stroked-button type="button" (click)="goBack()">
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>add</mat-icon>
+          Create Complex
+        </button>
+      </div>
+    </form>
+  </div>
+</app-layout>

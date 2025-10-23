@@ -1,0 +1,109 @@
+<app-layout
+  [title]="complex?.identity || 'Complex Details'"
+  [subtitle]="complex?.address"
+>
+  <div header-actions>
+    <button mat-stroked-button routerLink="/complexes">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Complexes
+    </button>
+    <button mat-raised-button color="primary" routerLink="/buildings/create">
+      <mat-icon>add</mat-icon>
+      Add Building
+    </button>
+  </div>
+
+  <!-- Complex Info Card -->
+  <mat-card class="info-card">
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <mat-icon>location_city</mat-icon>
+          <div>
+            <div class="info-label">Complex Identity</div>
+            <div class="info-value">{{ complex?.identity }}</div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>place</mat-icon>
+          <div>
+            <div class="info-label">Address</div>
+            <div class="info-value">{{ complex?.address }}</div>
+          </div>
+        </div>
+
+        <div class="info-item" *ngIf="complex?.campaign_start">
+          <mat-icon>event</mat-icon>
+          <div>
+            <div class="info-label">Campaign Period</div>
+            <div class="info-value">
+              {{ complex.campaign_start | date : "mediumDate" }} -
+              {{ complex.campaign_end | date : "mediumDate" }}
+            </div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>business</mat-icon>
+          <div>
+            <div class="info-label">Total Buildings</div>
+            <div class="info-value">{{ buildings.length }}</div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Buildings Section -->
+  <div class="section-header">
+    <h2>Buildings in this Complex</h2>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="buildings.length === 0" class="empty-state">
+    <mat-icon>business</mat-icon>
+    <h3>No buildings yet</h3>
+    <p>Start by adding a building to this complex</p>
+    <button mat-raised-button color="primary" routerLink="/buildings/create">
+      <mat-icon>add</mat-icon>
+      Add Building
+    </button>
+  </div>
+
+  <!-- Building Cards -->
+  <div *ngIf="buildings.length > 0" class="building-grid">
+    <div class="building-card" *ngFor="let building of buildings">
+      <div class="building-header">
+        <div class="building-icon">
+          <mat-icon>business</mat-icon>
+        </div>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          class="building-menu"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="deleteBuilding(building.id)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <h3 class="building-title">{{ building.name }}</h3>
+
+      <div class="building-address" *ngIf="building.address">
+        <mat-icon>place</mat-icon>
+        <span>{{ building.address }}</span>
+      </div>
+
+      <div class="building-date">
+        <mat-icon>schedule</mat-icon>
+        <span>Created {{ building.created_at | date : "mediumDate" }}</span>
+      </div>
+    </div>
+  </div>
+</app-layout>

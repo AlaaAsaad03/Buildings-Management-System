@@ -1,24 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { ComplexService } from '../complex.service';
-
+import { BuildingService } from '../../buildings/building.service';
+import { LayoutComponent } from '../../shared/layout/layout.component';
 
 @Component({
   selector: 'app-complex-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    LayoutComponent
+  ],
   templateUrl: './complex-list.component.html',
-  styleUrl: './complex-list.component.css'
+  styleUrls: ['./complex-list.component.css']
 })
-
-export class ComplexListComponent {
+export class ComplexListComponent implements OnInit {
   complexes: any[] = [];
-
+  buildingCounts: { [key: number]: number } = {};
 
   constructor(
     private complexService: ComplexService,
-    private router: Router
+    private buildingService: BuildingService
   ) { }
 
   ngOnInit(): void {
@@ -29,16 +37,26 @@ export class ComplexListComponent {
     this.complexService.getComplexes().subscribe({
       next: (response) => {
         this.complexes = response;
+        // Load building counts for each complex
+        this.complexes.forEach(complex => {
+          this.loadBuildingCount(complex.id);
+        });
       },
       error: (error) => {
-        console.error('Error fetching complexes:', error);
+        console.error('Error loading complexes:', error);
       }
-    })
+    });
   }
-  goToCreate(): void {
-    this.router.navigate(['/complexes/create']);
+
+  loadBuildingCount(complexId: number): void {
+    this.buildingService.getBuildings(complexId).subscribe({
+      next: (response) => {
+        this.buildingCounts[complexId] = response.length;
+      }
+    });
   }
-  goBack(): void {
-    this.router.navigate(['/admins']);
+
+  getBuildingCount(complexId: number): number {
+    return this.buildingCounts[complexId] || 0;
   }
 }

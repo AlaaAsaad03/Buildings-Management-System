@@ -1,41 +1,82 @@
-<div class="building-list-conatiner">
-  <div class="header">
-    <h2>Buildings</h2>
-    <div>
-      <button (click)="gotToCreate()">Add Building</button>
-      <button (click)="goBack()">Back</button>
-    </div>
-  </div>
-  <div class="filter">
-    <label> Filter By Complex: </label>
-    <select [(ngModel)]="selectedComplexId" (change)="onFilterChange()">
-      <option [ngValue]="null">All Complexes</option>
-      <option *ngFor="let complex of complexes" [ngValue]="complex.id">
-        {{ complex.identity }}
-      </option>
-    </select>
+<app-layout title="Buildings" subtitle="Manage all buildings across complexes">
+  <div header-actions>
+    <button mat-raised-button color="primary" routerLink="/buildings/create">
+      <mat-icon>add</mat-icon>
+      Add Building
+    </button>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Identity</th>
-        <th>Complex ID</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let building of buildings">
-        <td>{{ building.name }}</td>
-        <td>{{ building.address || "N/A" }}</td>
-        <td>{{ building.complex_id }}</td>
-        <td>
-          <button class="delete-btn" (click)="deleteBuilding(building.id)">
-            Delete
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Filter by Complex</mat-label>
+      <mat-select
+        [(ngModel)]="selectedComplexId"
+        (selectionChange)="onFilterChange()"
+      >
+        <mat-option [value]="null">All Complexes</mat-option>
+        <mat-option *ngFor="let complex of complexes" [value]="complex.id">
+          {{ complex.identity }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>filter_list</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="buildings.length === 0" class="empty-state">
+    <mat-icon>business</mat-icon>
+    <h3>No buildings found</h3>
+    <p *ngIf="!selectedComplexId">
+      Get started by creating your first building
+    </p>
+    <p *ngIf="selectedComplexId">No buildings in this complex yet</p>
+    <button mat-raised-button color="primary" routerLink="/buildings/create">
+      <mat-icon>add</mat-icon>
+      Create Building
+    </button>
+  </div>
+
+  <!-- Building Cards -->
+  <div *ngIf="buildings.length > 0" class="building-grid">
+    <div class="building-card" *ngFor="let building of buildings">
+      <div class="building-header">
+        <div class="building-icon">
+          <mat-icon>business</mat-icon>
+        </div>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          class="building-menu"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="deleteBuilding(building.id)">
+            <mat-icon color="warn">delete</mat-icon>
+            <span>Delete</span>
           </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+        </mat-menu>
+      </div>
+
+      <h3 class="building-title">{{ building.name }}</h3>
+
+      <div class="building-info">
+        <div class="info-item" *ngIf="building.address">
+          <mat-icon>place</mat-icon>
+          <span>{{ building.address }}</span>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>location_city</mat-icon>
+          <span>{{ getComplexName(building.complex_id) }}</span>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>schedule</mat-icon>
+          <span>{{ building.created_at | date : "mediumDate" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

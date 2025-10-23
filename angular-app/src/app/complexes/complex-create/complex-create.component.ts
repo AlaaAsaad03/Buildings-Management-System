@@ -3,13 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'
 import { ComplexService } from '../complex.service';
-
-
+import { LayoutComponent } from '../../shared/layout/layout.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-complex-create',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule,
+    FormsModule,
+    LayoutComponent,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
   templateUrl: './complex-create.component.html',
   styleUrl: './complex-create.component.css'
 })

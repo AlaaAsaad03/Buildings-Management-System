@@ -2,26 +2,38 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { AdminService } from '../admin.service';
 import { AuthService } from '../../auth/auth.service';
+import { LayoutComponent } from '../../shared/layout/layout.component';
 
 @Component({
   selector: 'app-admin-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    LayoutComponent
+  ],
   templateUrl: './admin-list.component.html',
-  styleUrl: './admin-list.component.css'
+  styleUrls: ['./admin-list.component.css']
 })
-
 export class AdminListComponent implements OnInit {
-
   admins: any[] = [];
   searchTerm = '';
   currentPage = 1;
   totalPages = 1;
-  perPage = 10;
   isSuperAdmin = false;
-
+  displayedColumns: string[] = ['name', 'role', 'status', 'phone'];
 
   constructor(
     private adminService: AdminService,
@@ -29,7 +41,6 @@ export class AdminListComponent implements OnInit {
     private router: Router
   ) { }
 
-  // once when the component is initialized then load the admins
   ngOnInit(): void {
     this.isSuperAdmin = this.authService.isSuperAdmin();
     this.loadAdmins();
@@ -42,9 +53,9 @@ export class AdminListComponent implements OnInit {
         this.totalPages = response.pages;
       },
       error: (error) => {
-        console.error('Error fetching admins:', error);
+        console.error('Error loading admins:', error);
       }
-    })
+    });
   }
 
   onSearch(): void {
@@ -64,6 +75,13 @@ export class AdminListComponent implements OnInit {
       this.currentPage--;
       this.loadAdmins();
     }
+  }
+
+  getRoleBadgeClass(role: string): string {
+    if (role === 'Super Admin') return 'super-admin';
+    if (role === 'Complex Admin') return 'complex-admin';
+    if (role === 'Building Admin') return 'building-admin';
+    return '';
   }
 
   goToCreate(): void {

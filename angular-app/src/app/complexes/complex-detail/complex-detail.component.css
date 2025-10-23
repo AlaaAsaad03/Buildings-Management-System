@@ -1,9 +1,47 @@
-.filter-section {
+.info-card {
+    margin-bottom: 32px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.info-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.info-item mat-icon {
+    color: #4f46e5;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.info-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.section-header {
     margin-bottom: 24px;
 }
 
-.filter-field {
-    max-width: 300px;
+.section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
 }
 
 .empty-state {
@@ -17,7 +55,6 @@
 .empty-state mat-icon {
     font-size: 1rem;
 }
-
 
 .empty-state h3 {
     font-size: 1.5rem;
@@ -34,7 +71,7 @@
 
 .building-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
 }
 
@@ -42,14 +79,13 @@
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    padding: 24px;
+    padding: 20px;
     transition: all 0.2s;
 }
 
 .building-card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
-    border-color: #cbd5e0;
 }
 
 .building-header {
@@ -84,32 +120,32 @@
     font-size: 1.125rem;
     font-weight: 600;
     color: #0f172a;
-    margin: 0 0 16px 0;
+    margin: 0 0 12px 0;
 }
 
-.building-info {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.info-item {
+.building-address,
+.building-date {
     display: flex;
     align-items: center;
     gap: 8px;
     color: #64748b;
     font-size: 0.9rem;
+    margin-bottom: 8px;
 }
 
-.info-item mat-icon {
+.building-address mat-icon,
+.building-date mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
-    color: #94a3b8;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
     .building-grid {
         grid-template-columns: 1fr;
     }

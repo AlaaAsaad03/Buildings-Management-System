@@ -1,39 +1,56 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { BuildingService } from '../building.service';
 import { ComplexService } from '../../complexes/complex.service';
+import { LayoutComponent } from '../../shared/layout/layout.component';
 
 @Component({
   selector: 'app-building-create',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    LayoutComponent
+  ],
   templateUrl: './building-create.component.html',
-  styleUrl: './building-create.component.css'
+  styleUrls: ['./building-create.component.css']
 })
-
-export class BuildingCreateComponent {
+export class BuildingCreateComponent implements OnInit {
   building = {
     name: '',
     address: '',
-    complex_id: '',
+    complex_id: 0,
+    civility: 'Mr',
     first_name: '',
     last_name: '',
     email: '',
     phone: ''
-  }
+  };
+
   complexes: any[] = [];
   errorMessage = '';
   successMessage = '';
 
-
   constructor(
     private buildingService: BuildingService,
     private complexService: ComplexService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadComplexes();
   }
 
@@ -44,30 +61,54 @@ export class BuildingCreateComponent {
       },
       error: (error) => {
         console.error('Error loading complexes:', error);
+        this.errorMessage = 'Failed to load complexes. Please refresh the page.';
       }
-    })
+    });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
 
+    // Validation
+    if (this.building.complex_id === 0) {
+      this.errorMessage = 'Please select a residential complex';
+      return;
+    }
+
+    if (!this.building.name.trim()) {
+      this.errorMessage = 'Building name is required';
+      return;
+    }
+
+    if (!this.building.first_name.trim() || !this.building.last_name.trim()) {
+      this.errorMessage = 'Admin first name and last name are required';
+      return;
+    }
+
+    if (!this.building.email.trim()) {
+      this.errorMessage = 'Admin email is required';
+      return;
+    }
+
+    // Email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(this.building.email)) {
+      this.errorMessage = 'Please enter a valid email address';
+      return;
+    }
+
+    // Submit
     this.buildingService.createBuilding(this.building).subscribe({
       next: (response) => {
-        this.successMessage = 'Building and admin created successfully!';
+        this.successMessage = 'Building and administrator created successfully!';
         setTimeout(() => {
           this.router.navigate(['/buildings']);
         }, 1500);
       },
       error: (error) => {
-        this.errorMessage = error.error.message || 'An error occurred while creating the building.';
+        this.errorMessage = error.error?.error || 'Failed to create building. Please try again.';
       }
-    })
+    });
   }
-
-  goBack(): void {
-    this.router.navigate(['/buildings']);
-  }
-
-
 }

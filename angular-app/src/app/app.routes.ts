@@ -7,11 +7,18 @@ import { ComplexCreateComponent } from './complexes/complex-create/complex-creat
 import { BuildingListComponent } from './buildings/building-list/building-list.component';
 import { BuildingCreateComponent } from './buildings/building-create/building-create.component';
 import { authGuard, superAdminGuard } from './auth/auth.guard';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ComplexDetailComponent } from './complexes/complex-detail/complex-detail.component';
 
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [authGuard]
+    },
     {
         path: 'admins',
         component: AdminListComponent,
@@ -31,6 +38,12 @@ export const routes: Routes = [
         path: 'complexes/create',
         component: ComplexCreateComponent,
         canActivate: [authGuard]
+    },
+    {
+        path: 'complexes/:id',
+        component: ComplexDetailComponent,
+        canActivate: [authGuard]
+
     },
     {
         path: 'buildings',

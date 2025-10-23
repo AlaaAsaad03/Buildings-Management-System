@@ -1,16 +1,33 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BuildingService } from '../building.service';
 import { ComplexService } from '../../complexes/complex.service';
+import { LayoutComponent } from '../../shared/layout/layout.component'
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-building-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatMenuModule,
+    LayoutComponent
+  ],
   templateUrl: './building-list.component.html',
-  styleUrl: './building-list.component.css'
+  styleUrls: ['./building-list.component.css']
 })
 
 export class BuildingListComponent {
@@ -77,6 +94,11 @@ export class BuildingListComponent {
 
   goBack(): void {
     this.router.navigate(['/admins']);
+  }
+
+  getComplexName(complexId: number): string {
+    const complex = this.complexes.find(c => c.id === complexId);
+    return complex ? complex.identity : 'Unknown';
   }
 
 }

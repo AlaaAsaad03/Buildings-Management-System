@@ -1,69 +1,201 @@
-<div class="create-container">
-  <h2>Create New Building</h2>
+<app-layout title="Create Building" subtitle="Add a new building to a complex">
+  <div header-actions>
+    <button mat-stroked-button routerLink="/buildings">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+  </div>
 
-  <form (ngSubmit)="onSubmit()">
-    <h3>Building Information</h3>
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()" class="modern-form">
+      <!-- Building Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>business</mat-icon>
+          Building Information
+        </h3>
 
-    <div class="form-group">
-      <label> Name </label>
-      <input type="text" [(ngModel)]="building.name" name="name" required />
-    </div>
-    <div class="form-group">
-      <label> Address </label>
-      <input
-        type="text"
-        [(ngModel)]="building.address"
-        name="address"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label> Residental Complex </label>
-      <select [(ngModel)]="building.complex_id" name="complex_id" required>
-        <option value="0" disabled>Select a complex</option>
-        <option *ngFor="let complex of complexes" [value]="complex.id">
-          {{ complex.identity }}
-        </option>
-      </select>
-    </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Building Name</mat-label>
+            <input matInput [(ngModel)]="building.name" name="name" required />
+            <mat-hint>Enter a descriptive name for this building</mat-hint>
+          </mat-form-field>
+        </div>
 
-    <h3>Building Admin Information</h3>
-    <div class="form-group">
-      <label> First Name </label>
-      <input
-        type="text"
-        [(ngModel)]="building.first_name"
-        name="first_name"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label> Last Name </label>
-      <input
-        type="text"
-        [(ngModel)]="building.last_name"
-        name="last_name"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label> Email </label>
-      <input type="email" [(ngModel)]="building.email" name="email" required />
-    </div>
-    <div class="form-group">
-      <label> Phone </label>
-      <input type="text" [(ngModel)]="building.phone" name="phone" required />
-    </div>
-    <div class="error" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
-    <div class="success" *ngIf="successMessage">
-      {{ successMessage }}
-    </div>
-    <div class="buttons">
-      <button type="submit">Create Building</button>
-      <button type="button" (click)="goBack()">Cancel</button>
-    </div>
-  </form>
-</div>
-<p>building-create works!</p>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Address</mat-label>
+            <textarea
+              matInput
+              [(ngModel)]="building.address"
+              name="address"
+              rows="2"
+              placeholder="Building address (optional)"
+            ></textarea>
+            <mat-icon matPrefix>place</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Residential Complex</mat-label>
+            <mat-select
+              [(ngModel)]="building.complex_id"
+              name="complex_id"
+              required
+            >
+              <mat-option [value]="0" disabled>Select a complex</mat-option>
+              <mat-option
+                *ngFor="let complex of complexes"
+                [value]="complex.id"
+              >
+                {{ complex.identity }} - {{ complex.address }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>location_city</mat-icon>
+            <mat-hint>Choose which complex this building belongs to</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Empty state if no complexes -->
+        <div *ngIf="complexes.length === 0" class="warning-box">
+          <mat-icon>warning</mat-icon>
+          <div>
+            <strong>No complexes available</strong>
+            <p>
+              You need to create a residential complex first before adding
+              buildings.
+            </p>
+            <button
+              mat-stroked-button
+              color="primary"
+              routerLink="/complexes/create"
+              type="button"
+            >
+              <mat-icon>add</mat-icon>
+              Create Complex
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Building Admin Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>person</mat-icon>
+          Building Administrator
+        </h3>
+        <p class="section-subtitle">
+          This person will be responsible for managing this building
+        </p>
+
+        <div class="form-row two-columns">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              [(ngModel)]="building.first_name"
+              name="first_name"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              [(ngModel)]="building.last_name"
+              name="last_name"
+              required
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="form-row two-columns">
+          <mat-form-field appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input
+              matInput
+              type="email"
+              [(ngModel)]="building.email"
+              name="email"
+              required
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-hint>Admin will use this email to login</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input
+              matInput
+              type="tel"
+              [(ngModel)]="building.phone"
+              name="phone"
+            />
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-hint>Optional</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Civility</mat-label>
+            <mat-select [(ngModel)]="building.civility" name="civility">
+              <mat-option value="Mr">Mr</mat-option>
+              <mat-option value="Ms">Ms</mat-option>
+              <mat-option value="Mrs">Mrs</mat-option>
+              <mat-option value="Dr">Dr</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+          <mat-icon>info</mat-icon>
+          <div>
+            <strong>Default Password</strong>
+            <p>
+              A default password will be assigned. The admin should change it
+              after first login.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="message error-message" *ngIf="errorMessage">
+        <mat-icon>error</mat-icon>
+        <div>
+          <strong>Error</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
+      </div>
+
+      <div class="message success-message" *ngIf="successMessage">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <strong>Success!</strong>
+          <p>{{ successMessage }}</p>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button mat-stroked-button type="button" routerLink="/buildings">
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="complexes.length === 0"
+        >
+          <mat-icon>add</mat-icon>
+          Create Building
+        </button>
+      </div>
+    </form>
+  </div>
+</app-layout>

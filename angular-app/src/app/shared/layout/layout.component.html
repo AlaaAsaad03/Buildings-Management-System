@@ -1,0 +1,89 @@
+<div class="app-container">
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <div class="logo" routerLink="/dashboard">
+        <mat-icon>apartment</mat-icon>
+        <span>BuildingHub</span>
+      </div>
+
+      <div class="nav-links">
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </a>
+        <a routerLink="/complexes" routerLinkActive="active">
+          <mat-icon>location_city</mat-icon>
+          <span>Complexes</span>
+        </a>
+        <a routerLink="/buildings" routerLinkActive="active">
+          <mat-icon>business</mat-icon>
+          <span>Buildings</span>
+        </a>
+        <a routerLink="/admins" routerLinkActive="active">
+          <mat-icon>people</mat-icon>
+          <span>Admins</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="userMenu"
+        class="user-button"
+      >
+        <div class="user-avatar">
+          {{ currentUser?.first_name?.charAt(0)
+          }}{{ currentUser?.last_name?.charAt(0) }}
+        </div>
+      </button>
+
+      <mat-menu #userMenu="matMenu" class="user-menu">
+        <div class="user-menu-header">
+          <div class="user-avatar-large">
+            {{ currentUser?.first_name?.charAt(0)
+            }}{{ currentUser?.last_name?.charAt(0) }}
+          </div>
+          <div class="user-details">
+            <div class="user-name">
+              {{ currentUser?.first_name }} {{ currentUser?.last_name }}
+            </div>
+            <div class="user-email">{{ currentUser?.email }}</div>
+            <div class="user-role-badge">{{ currentUser?.role }}</div>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/dashboard">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">{{ title }}</h1>
+        <p class="page-subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+      </div>
+      <div class="header-actions">
+        <ng-content select="[header-actions]"></ng-content>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <ng-content></ng-content>
+    </div>
+  </main>
+</div>

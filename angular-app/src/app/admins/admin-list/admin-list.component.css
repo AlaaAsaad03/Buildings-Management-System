@@ -1,0 +1,135 @@
+.search-section {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: flex-start;
+}
+
+.search-field {
+    flex: 1;
+    max-width: 400px;
+}
+
+.table-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.modern-table {
+    width: 100%;
+}
+
+.modern-table th {
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.modern-table td {
+    color: #1e293b;
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.user-name-cell {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.user-email-cell {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.role-badge.super-admin {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.role-badge.complex-admin {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.role-badge.building-admin {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.page-info {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-section {
+        flex-direction: column;
+    }
+
+    .search-field {
+        max-width: 100%;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+}

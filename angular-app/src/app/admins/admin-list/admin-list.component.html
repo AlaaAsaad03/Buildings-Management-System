@@ -1,46 +1,106 @@
-<div class="admin-list-container">
-  <div class="header">
-    <h2>Admin Management</h2>
-    <button (click)="logout()">Logout</button>
-  </div>
-
-  <div class="actions">
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      placeholder="Search by name or email..."
-      (keyup)="onSearch()"
-    />
-    <button (click)="onSearch()">Search</button>
-    <button *ngIf="isSuperAdmin" (click)="goToCreate()">Add Admin</button>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Status</th>
-        <th>Phone</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let admin of admins">
-        <td>
-          {{ admin.civility }} {{ admin.first_name }} {{ admin.last_name }}
-        </td>
-        <td>{{ admin.email }}</td>
-        <td>{{ admin.role }}</td>
-        <td>{{ admin.status }}</td>
-        <td>{{ admin.phone || "N/A" }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="pagination">
-    <button (click)="prevPage()" [disabled]="currentPage == 1">Previous</button>
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <button (click)="nextPage()" [disabled]="currentPage == totalPages">
-      Next
+<app-layout title="Admins" subtitle="Manage system administrators">
+  <div header-actions>
+    <button
+      *ngIf="isSuperAdmin"
+      mat-raised-button
+      color="primary"
+      (click)="goToCreate()"
+    >
+      <mat-icon>add</mat-icon>
+      Add Admin
     </button>
   </div>
-</div>
+
+  <!-- Search Bar -->
+  <div class="search-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search admins</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchTerm"
+        placeholder="Search by name or email..."
+        (keyup.enter)="onSearch()"
+      />
+      <mat-icon matPrefix>search</mat-icon>
+      <button
+        *ngIf="searchTerm"
+        matSuffix
+        mat-icon-button
+        (click)="searchTerm = ''; onSearch()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="onSearch()">
+      Search
+    </button>
+  </div>
+
+  <!-- Admin Table -->
+  <div class="table-container">
+    <table mat-table [dataSource]="admins" class="modern-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let admin">
+          <div class="user-cell">
+            <div class="user-avatar-small">
+              {{ admin.first_name?.charAt(0) }}{{ admin.last_name?.charAt(0) }}
+            </div>
+            <div>
+              <div class="user-name-cell">
+                {{ admin.civility }} {{ admin.first_name }}
+                {{ admin.last_name }}
+              </div>
+              <div class="user-email-cell">{{ admin.email }}</div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let admin">
+          <span class="role-badge" [ngClass]="getRoleBadgeClass(admin.role)">
+            {{ admin.role }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let admin">
+          <span class="status-badge" [ngClass]="admin.status">
+            {{ admin.status }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let admin">
+          {{ admin.phone || "—" }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button mat-button (click)="prevPage()" [disabled]="currentPage === 1">
+      <mat-icon>chevron_left</mat-icon>
+      Previous
+    </button>
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button
+      mat-button
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+    >
+      Next
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</app-layout>

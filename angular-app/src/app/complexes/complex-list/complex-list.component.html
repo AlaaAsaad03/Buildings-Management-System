@@ -1,27 +1,50 @@
-<div class="complex-list-container">
-  <div class="header">
-    <h2>Residental Complexes</h2>
-    <div>
-      <button (click)="goToCreate()">Add Complex</button>
-      <button (click)="goBack()">Back</button>
+<app-layout title="Complexes" subtitle="Manage residential complexes">
+  <div header-actions>
+    <button mat-raised-button color="primary" routerLink="/complexes/create">
+      <mat-icon>add</mat-icon>
+      Add Complex
+    </button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="complexes.length === 0" class="empty-state">
+    <mat-icon>location_city</mat-icon>
+    <h3>No complexes yet</h3>
+    <p>Get started by creating your first residential complex</p>
+    <button mat-raised-button color="primary" routerLink="/complexes/create">
+      <mat-icon>add</mat-icon>
+      Create Complex
+    </button>
+  </div>
+
+  <!-- Complex Cards Grid -->
+  <div *ngIf="complexes.length > 0" class="complex-grid">
+    <div
+      class="complex-card"
+      *ngFor="let complex of complexes"
+      [routerLink]="['/complexes', complex.id]"
+    >
+      <div class="complex-icon">
+        <mat-icon>location_city</mat-icon>
+      </div>
+      <div class="complex-content">
+        <h3 class="complex-title">{{ complex.identity }}</h3>
+        <div class="complex-address">
+          <mat-icon>place</mat-icon>
+          <span>{{ complex.address }}</span>
+        </div>
+        <div class="complex-meta">
+          <div class="meta-item" *ngIf="complex.campaign_start">
+            <mat-icon>event</mat-icon>
+            <span>{{ complex.campaign_start | date : "mediumDate" }}</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>business</mat-icon>
+            <span>{{ getBuildingCount(complex.id) }} Buildings</span>
+          </div>
+        </div>
+      </div>
+      <mat-icon class="complex-arrow">arrow_forward</mat-icon>
     </div>
   </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Identity</th>
-        <th>Address</th>
-        <th>Campaign Start</th>
-        <th>Campaign End</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let complex of complexes">
-        <td>{{ complex.identity }}</td>
-        <td>{{ complex.address }}</td>
-        <td>{{ complex.campaign_start || "N/A" }}</td>
-        <td>{{ complex.campaign_end || "N/A" }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+</app-layout>
