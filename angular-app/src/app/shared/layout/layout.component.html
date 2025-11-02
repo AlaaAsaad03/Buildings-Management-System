@@ -6,7 +6,6 @@
         <mat-icon>apartment</mat-icon>
         <span>BuildingHub</span>
       </div>
-
       <div class="nav-links">
         <a
           routerLink="/dashboard"
@@ -32,29 +31,66 @@
     </div>
 
     <div class="nav-right">
+      <!-- Role Badge -->
+      <div
+        class="role-badge"
+        [ngClass]="{
+          'super-admin': authService.hasRole('Super Admin'),
+          'complex-admin': authService.hasRole('Complex Admin'),
+          'building-admin': authService.hasRole('Building Admin')
+        }"
+      >
+        <mat-icon>{{ getRoleIcon() }}</mat-icon>
+        <span>{{ currentUser?.role }}</span>
+      </div>
+
+      <!-- User Menu -->
       <button
         mat-icon-button
         [matMenuTriggerFor]="userMenu"
         class="user-button"
       >
         <div class="user-avatar">
-          {{ currentUser?.first_name?.charAt(0)
-          }}{{ currentUser?.last_name?.charAt(0) }}
+          <img
+            *ngIf="currentUser?.profile_picture"
+            [src]="currentUser.profile_picture"
+            alt="User Avatar"
+          />
+          <span *ngIf="!currentUser?.profile_picture">
+            {{ currentUser?.first_name?.charAt(0)
+            }}{{ currentUser?.last_name?.charAt(0) }}
+          </span>
         </div>
       </button>
 
       <mat-menu #userMenu="matMenu" class="user-menu">
         <div class="user-menu-header">
           <div class="user-avatar-large">
-            {{ currentUser?.first_name?.charAt(0)
-            }}{{ currentUser?.last_name?.charAt(0) }}
+            <img
+              *ngIf="currentUser?.profile_picture"
+              [src]="currentUser.profile_picture"
+              alt="User Avatar"
+            />
+            <span *ngIf="!currentUser?.profile_picture">
+              {{ currentUser?.first_name?.charAt(0)
+              }}{{ currentUser?.last_name?.charAt(0) }}
+            </span>
           </div>
           <div class="user-details">
             <div class="user-name">
               {{ currentUser?.first_name }} {{ currentUser?.last_name }}
             </div>
             <div class="user-email">{{ currentUser?.email }}</div>
-            <div class="user-role-badge">{{ currentUser?.role }}</div>
+            <div
+              class="user-role-badge"
+              [ngClass]="{
+                'super-admin': authService.hasRole('Super Admin'),
+                'complex-admin': authService.hasRole('Complex Admin'),
+                'building-admin': authService.hasRole('Building Admin')
+              }"
+            >
+              {{ currentUser?.role }}
+            </div>
           </div>
         </div>
         <mat-divider></mat-divider>
@@ -62,6 +98,11 @@
           <mat-icon>dashboard</mat-icon>
           <span>Dashboard</span>
         </button>
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>

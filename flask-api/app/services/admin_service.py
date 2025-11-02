@@ -17,6 +17,12 @@ class AdminService:
             'pages' : pagination.pages
         }
     
+    def get_admin_by_id(self, admin_id):
+        admin =  self.admin_repo.find_by_id(admin_id)
+
+        return admin.to_dict() if admin else None
+
+
     def create_admin(self, data, creator_role):
 
         if creator_role != 'Super Admin':
@@ -36,3 +42,4 @@ class AdminService:
 
         admin = self.admin_repo.create(data)
         return admin.to_dict(), None
+    

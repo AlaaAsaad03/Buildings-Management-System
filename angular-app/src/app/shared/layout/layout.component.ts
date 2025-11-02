@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrls: ['./layout.component.css']
 })
 
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
   @Input() title: string = 'Dashboard';
   @Input() subtitle?: string;
 
@@ -35,16 +35,28 @@ export class LayoutComponent {
   isSuperAdmin = false;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) {
     this.currentUser = this.authService.getCurrentUser();
-    this.isSuperAdmin = this.authService.isSuperAdmin();
+  }
+
+  ngOnInit(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  getRoleIcon(): string {
+    if (this.authService.hasRole('Super Admin')) return 'shield';
+    if (this.authService.hasRole('Complex Admin')) return 'apartment';
+    if (this.authService.hasRole('Building Admin')) return 'home';
+    return 'person';
   }
 
 }

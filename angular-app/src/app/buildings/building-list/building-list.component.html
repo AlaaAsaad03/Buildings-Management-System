@@ -1,13 +1,18 @@
 <app-layout title="Buildings" subtitle="Manage all buildings across complexes">
   <div header-actions>
-    <button mat-raised-button color="primary" routerLink="/buildings/create">
+    <button
+      *ngIf="canCreateBuilding"
+      mat-raised-button
+      color="primary"
+      routerLink="/buildings/create"
+    >
       <mat-icon>add</mat-icon>
       Add Building
     </button>
   </div>
 
   <!-- Filter Section -->
-  <div class="filter-section">
+  <div class="filter-section" *ngIf="showComplexFilter">
     <mat-form-field appearance="outline" class="filter-field">
       <mat-label>Filter by Complex</mat-label>
       <mat-select
@@ -21,6 +26,12 @@
       </mat-select>
       <mat-icon matPrefix>filter_list</mat-icon>
     </mat-form-field>
+  </div>
+
+  <!-- Info message for Building Admin -->
+  <div *ngIf="isBuildingAdmin" class="info-banner">
+    <mat-icon>info</mat-icon>
+    <span>You are viewing your assigned building</span>
   </div>
 
   <!-- Empty State -->
@@ -45,6 +56,7 @@
           <mat-icon>business</mat-icon>
         </div>
         <button
+          *ngIf="canDeleteBuilding"
           mat-icon-button
           [matMenuTriggerFor]="menu"
           class="building-menu"

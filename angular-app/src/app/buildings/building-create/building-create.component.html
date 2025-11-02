@@ -7,7 +7,73 @@
   </div>
 
   <div class="form-container">
-    <form (ngSubmit)="onSubmit()" class="modern-form">
+    <!-- Success Modal with Credentials -->
+    <div *ngIf="showCredentials" class="credentials-modal">
+      <div class="credentials-content">
+        <div class="credentials-header">
+          <mat-icon>check_circle</mat-icon>
+          <h2>Building Created Successfully!</h2>
+        </div>
+
+        <div class="credentials-info">
+          <p class="credentials-message">
+            A Building Administrator account has been created. Please share
+            these credentials with the administrator:
+          </p>
+
+          <div class="credentials-box">
+            <div class="credential-item">
+              <div class="credential-label">
+                <mat-icon>email</mat-icon>
+                Email
+              </div>
+              <div class="credential-value">{{ createdAdminEmail }}</div>
+              <button
+                mat-icon-button
+                (click)="copyToClipboard(createdAdminEmail)"
+                title="Copy to clipboard"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+
+            <div class="credential-item">
+              <div class="credential-label">
+                <mat-icon>vpn_key</mat-icon>
+                Password
+              </div>
+              <div class="credential-value password">
+                {{ createdAdminPassword }}
+              </div>
+              <button
+                mat-icon-button
+                (click)="copyToClipboard(createdAdminPassword)"
+                title="Copy to clipboard"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="warning-box">
+            <mat-icon>warning</mat-icon>
+            <div>
+              <strong>Important:</strong> Save these credentials now. The
+              administrator should change the password after first login.
+            </div>
+          </div>
+        </div>
+
+        <div class="credentials-actions">
+          <button mat-raised-button color="primary" (click)="goToBuildings()">
+            <mat-icon>done</mat-icon>
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="modern-form" *ngIf="!showCredentials">
       <!-- Building Information Section -->
       <div class="form-section">
         <h3 class="section-title">
@@ -155,10 +221,10 @@
         <div class="info-box">
           <mat-icon>info</mat-icon>
           <div>
-            <strong>Default Password</strong>
+            <strong>Automatic Password</strong>
             <p>
-              A default password will be assigned. The admin should change it
-              after first login.
+              A default password will be assigned. You'll receive the
+              credentials after creation to share with the administrator.
             </p>
           </div>
         </div>
@@ -170,14 +236,6 @@
         <div>
           <strong>Error</strong>
           <p>{{ errorMessage }}</p>
-        </div>
-      </div>
-
-      <div class="message success-message" *ngIf="successMessage">
-        <mat-icon>check_circle</mat-icon>
-        <div>
-          <strong>Success!</strong>
-          <p>{{ successMessage }}</p>
         </div>
       </div>
 

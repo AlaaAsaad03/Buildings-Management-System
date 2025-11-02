@@ -42,7 +42,9 @@ export class BuildingCreateComponent implements OnInit {
 
   complexes: any[] = [];
   errorMessage = '';
-  successMessage = '';
+  showCredentials = false;
+  createdAdminEmail = '';
+  createdAdminPassword = '';
 
   constructor(
     private buildingService: BuildingService,
@@ -68,7 +70,6 @@ export class BuildingCreateComponent implements OnInit {
 
   onSubmit(): void {
     this.errorMessage = '';
-    this.successMessage = '';
 
     // Validation
     if (this.building.complex_id === 0) {
@@ -101,14 +102,27 @@ export class BuildingCreateComponent implements OnInit {
     // Submit
     this.buildingService.createBuilding(this.building).subscribe({
       next: (response) => {
-        this.successMessage = 'Building and administrator created successfully!';
-        setTimeout(() => {
-          this.router.navigate(['/buildings']);
-        }, 1500);
+        // Show credentials modal
+        this.createdAdminEmail = response.admin_email;
+        this.createdAdminPassword = response.admin_password;
+        this.showCredentials = true;
       },
       error: (error) => {
         this.errorMessage = error.error?.error || 'Failed to create building. Please try again.';
       }
     });
+  }
+
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('✓ Copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+      alert('Failed to copy. Please copy manually.');
+    });
+  }
+
+  goToBuildings(): void {
+    this.router.navigate(['/buildings']);
   }
 }

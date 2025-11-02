@@ -9,6 +9,8 @@ import { ComplexService } from '../complex.service';
 import { BuildingService } from '../../buildings/building.service';
 import { LayoutComponent } from '../../shared/layout/layout.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from '../../auth/auth.service';
+
 
 @Component({
   selector: 'app-complex-detail',
@@ -25,12 +27,16 @@ import { MatMenuModule } from '@angular/material/menu';
   templateUrl: './complex-detail.component.html',
   styleUrls: ['./complex-detail.component.css']
 })
+
 export class ComplexDetailComponent implements OnInit {
   complex: any = null;
   buildings: any[] = [];
   complexId!: number;
+  canCreateBuilding: boolean = false;
+  canDeleteBuilding: boolean = false;
 
   constructor(
+    public authService: AuthService,
     private route: ActivatedRoute,
     private complexService: ComplexService,
     private buildingService: BuildingService
@@ -38,6 +44,8 @@ export class ComplexDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.complexId = Number(this.route.snapshot.paramMap.get('id'));
+    this.canCreateBuilding = this.authService.can('create:building');
+    this.canDeleteBuilding = this.authService.can('delete:building');
     this.loadComplex();
     this.loadBuildings();
   }

@@ -92,7 +92,7 @@
     height: 40px !important;
 }
 
-.user-avatar {
+/* .user-avatar {
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -103,7 +103,7 @@
     justify-content: center;
     font-weight: 600;
     font-size: 0.9rem;
-}
+} */
 
 /* User Menu */
 .user-menu-header {
@@ -113,7 +113,7 @@
     align-items: center;
 }
 
-.user-avatar-large {
+/* .user-avatar-large {
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -125,7 +125,7 @@
     font-weight: 600;
     font-size: 1.1rem;
     flex-shrink: 0;
-}
+} */
 
 .user-details {
     flex: 1;
@@ -221,4 +221,112 @@
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+.role-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 12px;
+}
+
+.role-badge mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.role-badge.super-admin {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.role-badge.super-admin mat-icon {
+    color: #f59e0b;
+}
+
+.role-badge.complex-admin {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.role-badge.complex-admin mat-icon {
+    color: #3b82f6;
+}
+
+.role-badge.building-admin {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.role-badge.building-admin mat-icon {
+    color: #10b981;
+}
+
+/* User Role Badge in Menu */
+.user-role-badge {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.user-role-badge.super-admin {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.user-role-badge.complex-admin {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.user-role-badge.building-admin {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .role-badge {
+        display: none;
+        /* Hide on mobile to save space */
+    }
+}
+
+.user-avatar,
+.user-avatar-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #e0e0e0;
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+}
+
+.user-avatar-large {
+    width: 80px;
+    height: 80px;
+    margin: 10px auto;
+}
+
+.user-avatar img,
+.user-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

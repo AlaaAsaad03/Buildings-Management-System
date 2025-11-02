@@ -1,8 +1,9 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+import os
 
 # Initialize extensions 
 db = SQLAlchemy()
@@ -16,15 +17,23 @@ def create_app(config_class='app.config.Config'):
     #loads settings (like database URL, secret keys, etc.) from a Config class
     app.config.from_object(config_class) 
 
+    #upload folders 
+    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'uploads')
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    # Create upload folder if it doesn't exist
+    os.makedirs(os.path.join(UPLOAD_FOLDER, 'profile_pictures'), exist_ok=True)
+
+
     #CORS for frontend-backend communication
-    # CORS(app, resources={r"/api/*": {
-    # "origins" :["http://localhost:4200"],
-    # "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    # "allow_headers": ["Content-Type", "Authorization"],
-    # "expose_headers": ["Authorization", "Content-Type"],
-    # "supports_credentials": True
-    # }})
-    CORS(app, resources={r"/api/*": {"origins" :"http://localhost:4200"}}, supports_credentials=True)
+    CORS(app, resources={r"/api/*": {
+    "origins" :["http://localhost:4200"],
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization"],
+    "expose_headers": ["Authorization", "Content-Type"],
+    "supports_credentials": True
+    }})
+    # CORS(app, resources={r"/api/*": {"origins" :"http://localhost:4200"}}, supports_credentials=True)
 
 
     #Attach extensions to app
@@ -32,13 +41,19 @@ def create_app(config_class='app.config.Config'):
     jwt.init_app(app)
     bcrypt.init_app(app)
 
+    @app.route('/uploads/<path:filename>')
+    def uploaded_file(filename):
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    
+
 
     #Register blueprints(routes)
-    from app.routes import auth_route, admin_route, complex_routes, building_routes
+    from app.routes import auth_route, admin_route, complex_routes, building_routes, profile_routes
     app.register_blueprint(auth_route.bp)
     app.register_blueprint(admin_route.bp)
     app.register_blueprint(complex_routes.bp)
     app.register_blueprint(building_routes.bp)
+    app.register_blueprint(profile_routes.bp)
 
 
 

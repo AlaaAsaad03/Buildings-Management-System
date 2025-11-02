@@ -7,7 +7,12 @@
       <mat-icon>arrow_back</mat-icon>
       Back to Complexes
     </button>
-    <button mat-raised-button color="primary" routerLink="/buildings/create">
+    <button
+      *ngIf="canCreateBuilding"
+      mat-raised-button
+      color="primary"
+      routerLink="/buildings/create"
+    >
       <mat-icon>add</mat-icon>
       Add Building
     </button>
@@ -79,6 +84,7 @@
           <mat-icon>business</mat-icon>
         </div>
         <button
+          *ngIf="canDeleteBuilding"
           mat-icon-button
           [matMenuTriggerFor]="menu"
           class="building-menu"

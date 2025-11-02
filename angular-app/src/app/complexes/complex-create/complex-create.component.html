@@ -1,13 +1,77 @@
 <app-layout title="Create Complex" subtitle="Add a new residential complex">
   <div header-actions>
-    <button mat-stroked-button (click)="goBack()">
+    <button mat-stroked-button routerLink="/complexes">
       <mat-icon>close</mat-icon>
       Cancel
     </button>
   </div>
 
   <div class="form-container">
-    <form (ngSubmit)="onSubmit()" class="modern-form">
+    <!-- Success Modal with Credentials -->
+    <div *ngIf="showCredentials" class="credentials-modal">
+      <div class="credentials-content">
+        <div class="credentials-header">
+          <mat-icon>check_circle</mat-icon>
+          <h2>Complex Created Successfully!</h2>
+        </div>
+
+        <div class="credentials-info">
+          <p class="credentials-message">
+            A Complex Administrator account has been created. Please share these
+            credentials with the administrator:
+          </p>
+
+          <div class="credentials-box">
+            <div class="credential-item">
+              <div class="credential-label">
+                <mat-icon>email</mat-icon>
+                Email
+              </div>
+              <div class="credential-value">{{ createdAdminEmail }}</div>
+              <button
+                mat-icon-button
+                (click)="copyToClipboard(createdAdminEmail)"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+
+            <div class="credential-item">
+              <div class="credential-label">
+                <mat-icon>vpn_key</mat-icon>
+                Password
+              </div>
+              <div class="credential-value password">
+                {{ createdAdminPassword }}
+              </div>
+              <button
+                mat-icon-button
+                (click)="copyToClipboard(createdAdminPassword)"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="warning-box">
+            <mat-icon>warning</mat-icon>
+            <div>
+              <strong>Important:</strong> Save these credentials now. The
+              administrator should change the password after first login.
+            </div>
+          </div>
+        </div>
+
+        <div class="credentials-actions">
+          <button mat-raised-button color="primary" (click)="goToComplexes()">
+            <mat-icon>done</mat-icon>
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="modern-form" *ngIf="!showCredentials">
       <!-- Complex Information Section -->
       <div class="form-section">
         <h3 class="section-title">
@@ -122,22 +186,31 @@
             <mat-icon matPrefix>phone</mat-icon>
           </mat-form-field>
         </div>
+
+        <div class="info-box">
+          <mat-icon>info</mat-icon>
+          <div>
+            <strong>Automatic Password</strong>
+            <p>
+              A default password will be assigned. You'll receive the
+              credentials after creation to share with the administrator.
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- Messages -->
       <div class="message error-message" *ngIf="errorMessage">
         <mat-icon>error</mat-icon>
-        {{ errorMessage }}
-      </div>
-
-      <div class="message success-message" *ngIf="successMessage">
-        <mat-icon>check_circle</mat-icon>
-        {{ successMessage }}
+        <div>
+          <strong>Error</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
       </div>
 
       <!-- Actions -->
       <div class="form-actions">
-        <button mat-stroked-button type="button" (click)="goBack()">
+        <button mat-stroked-button type="button" routerLink="/complexes">
           Cancel
         </button>
         <button mat-raised-button color="primary" type="submit">

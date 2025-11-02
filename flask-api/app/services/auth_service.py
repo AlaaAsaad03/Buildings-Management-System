@@ -27,8 +27,14 @@ class AuthService:
         token = create_access_token(
             identity = str(admin.id),
             additional_claims = {
-                'role' : admin.role
+                'role' : admin.role,
+                'email': admin.email,
+                'complex_id': admin.complex_id,
+                'building_id': admin.building_id
             }
         )
 
-        return { 'token': token, 'admin': admin.to_dict() }, None
+        return { 
+            'token': token,
+            'admin': admin.to_dict()
+        }, None

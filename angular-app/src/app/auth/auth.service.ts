@@ -3,15 +3,20 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, BehaviorSubject } from "rxjs";
 import { tap } from "rxjs/operators";
 
+
+export type Role = 'Super Admin' | 'Complex Admin' | 'Building Admin';
+
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthService {
   private apiUrl = 'http://127.0.0.1:5000/api';
   //create data stream to store user infor and make it available across the app
   private currentUserSubject = new BehaviorSubject<any>(null);
   // expose the stream safely
-  public cuurentUser$ = this.currentUserSubject.asObservable();
+  public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
     //It checks if user was already logged in,
@@ -55,9 +60,34 @@ export class AuthService {
   getCurrentUser(): any {
     return this.currentUserSubject.value;
   }
+  setCurrentUser(user: any): void {
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUserSubject.next(user);
+  }
 
-  isSuperAdmin(): boolean {
+
+  hasRole(...roles: Role[]): boolean {
     const user = this.getCurrentUser();
-    return user?.role === 'Super Admin';
+    return user ? roles.includes(user.role) : false;
+  }
+
+  //permissions 
+  can(permission: string): boolean {
+    switch (permission) {
+      case 'create_admin':
+      case 'create_complex':
+      case 'delete_building':
+      case 'view_all_buildings':
+        return this.hasRole('Super Admin');
+
+      case 'create_building':
+        return this.hasRole('Super Admin', 'Complex Admin');
+
+      case 'view_all_complexes':
+        return this.hasRole('Super Admin', 'Complex Admin');
+
+      default:
+        return false;
+    }
   }
 }

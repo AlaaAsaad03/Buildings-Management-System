@@ -4,6 +4,7 @@ from app.models.admin import Admin
 from app import bcrypt
 
 class BuildingService:
+    DEFAULT_PASSWORD = 'Building@123'
     
     def get_all(self, complex_id=None):
         query = Building.query
@@ -11,6 +12,10 @@ class BuildingService:
             query = query.filter_by(complex_id=complex_id)
         buildings = query.all()
         return [building.to_dict() for building in buildings]
+    
+    def get_by_id(self, building_id):
+        building = Building.query.get(building_id)
+        return building.to_dict() if building else None
     
     def create_building(self, data):
         new_building = Building(
@@ -30,14 +35,18 @@ class BuildingService:
             'phone': data.get('phone'),
             'role': data.get('role', 'Building Admin'),  # Default role
             'status': 'active',  # Could be 'pending' if you want approval
-            'password_hash': bcrypt.generate_password_hash('default123').decode('utf-8'),
+            'password_hash': bcrypt.generate_password_hash(self.DEFAULT_PASSWORD).decode('utf-8'),
             'building_id': new_building.id
         }
         admin = Admin(**admin_data)
         db.session.add(admin)
         db.session.commit()
 
-        return new_building.to_dict()
+        return {
+            **new_building.to_dict(),
+            'admin_email': admin.email,
+            'admin_password': self.DEFAULT_PASSWORD
+        }
     
     def delete_building(self, building_id):
         building = Building.query.get(building_id)

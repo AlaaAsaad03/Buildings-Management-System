@@ -135,3 +135,31 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Existing styles... */
+
+.info-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    color: #1e40af;
+    font-size: 0.95rem;
+}
+
+.info-banner mat-icon {
+    color: #3b82f6;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.info-banner strong {
+    color: #1e3a8a;
+    font-weight: 600;
+}

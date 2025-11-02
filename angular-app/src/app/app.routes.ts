@@ -9,7 +9,7 @@ import { BuildingCreateComponent } from './buildings/building-create/building-cr
 import { authGuard, superAdminGuard } from './auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ComplexDetailComponent } from './complexes/complex-detail/complex-detail.component';
-
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -17,6 +17,11 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent,
         canActivate: [authGuard]
     },
     {

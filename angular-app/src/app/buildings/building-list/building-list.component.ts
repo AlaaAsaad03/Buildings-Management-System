@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from '../../auth/auth.service';
+
 
 @Component({
   selector: 'app-building-list',
@@ -34,15 +36,22 @@ export class BuildingListComponent {
   buildings: any[] = [];
   complexes: any[] = [];
   selectedComplexId: number | null = null;
-
+  canCreateBuilding: boolean = false;
+  canDeleteBuilding: boolean = false;
+  isBuildingAdmin: boolean = false;
+  showComplexFilter: boolean = true;
 
   constructor(
+    public authService: AuthService,
     private buildingService: BuildingService,
     private complexService: ComplexService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.canCreateBuilding = this.authService.can('create_building');
+    this.canDeleteBuilding = this.authService.can('delete_building');
+    this.showComplexFilter = !this.isBuildingAdmin;
     this.loadComplexes();
     this.loadBuildings();
   }
@@ -60,14 +69,14 @@ export class BuildingListComponent {
   }
 
   loadBuildings(): void {
-    this.buildingService.getBuildings(this.selectedComplexId || undefined).subscribe({
+    // For Building Admin, don't send complex_id filter (backend will filter automatically)
+    const complexFilter = this.isBuildingAdmin ? undefined : (this.selectedComplexId || undefined);
+
+    this.buildingService.getBuildings(complexFilter).subscribe({
       next: (response) => {
-        this.buildings = response
-      },
-      error: (error) => {
-        console.error('Error loading buildings:', error);
+        this.buildings = response;
       }
-    })
+    });
   }
 
   onFilterChange(): void {

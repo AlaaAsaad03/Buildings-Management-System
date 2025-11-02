@@ -1,5 +1,5 @@
 <app-layout title="Dashboard" subtitle="Welcome back! Here's what's happening.">
-  <!-- Stats Grid -->
+  <!-- Stats Grid (unchanged) -->
   <div class="stats-grid">
     <div class="stat-card" routerLink="/admins">
       <div class="stat-icon purple">
@@ -48,50 +48,30 @@
   <div class="section">
     <div class="section-header">
       <h2 class="section-title">Quick Actions</h2>
-      <p class="section-subtitle">Common tasks to get you started</p>
+      <p class="section-subtitle">Tasks available based on your role</p>
     </div>
 
     <div class="action-cards">
-      <button class="action-card" routerLink="/complexes/create">
-        <div class="action-icon blue">
-          <mat-icon>add_business</mat-icon>
-        </div>
-        <div class="action-content">
-          <div class="action-title">Create Complex</div>
-          <div class="action-description">Add a new residential complex</div>
-        </div>
-        <mat-icon class="action-arrow">arrow_forward</mat-icon>
-      </button>
-
-      <button class="action-card" routerLink="/buildings/create">
-        <div class="action-icon green">
-          <mat-icon>add_home</mat-icon>
-        </div>
-        <div class="action-content">
-          <div class="action-title">Create Building</div>
-          <div class="action-description">Add a building to a complex</div>
-        </div>
-        <mat-icon class="action-arrow">arrow_forward</mat-icon>
-      </button>
-
-      <button
-        *ngIf="isSuperAdmin"
-        class="action-card"
-        routerLink="/admins/create"
-      >
-        <div class="action-icon purple">
-          <mat-icon>person_add</mat-icon>
-        </div>
-        <div class="action-content">
-          <div class="action-title">Create Admin</div>
-          <div class="action-description">Add a new administrator</div>
-        </div>
-        <mat-icon class="action-arrow">arrow_forward</mat-icon>
-      </button>
+      <ng-container *ngFor="let action of quickActions">
+        <button
+          *ngIf="!action.permission || authService.can(action.permission)"
+          class="action-card"
+          [routerLink]="action.route"
+        >
+          <div class="action-icon" [ngClass]="action.color">
+            <mat-icon>{{ action.icon }}</mat-icon>
+          </div>
+          <div class="action-content">
+            <div class="action-title">{{ action.title }}</div>
+            <div class="action-description">{{ action.description }}</div>
+          </div>
+          <mat-icon class="action-arrow">arrow_forward</mat-icon>
+        </button>
+      </ng-container>
     </div>
   </div>
 
-  <!-- Getting Started - Dynamic -->
+  <!-- Getting Started - Updated -->
   <div class="section">
     <div class="section-header">
       <div>
@@ -120,7 +100,7 @@
         <div class="checklist-content">
           <div class="checklist-title">Account Created</div>
           <div class="checklist-description">
-            Your admin account is active and ready
+            Your account is active and ready
           </div>
         </div>
         <div class="checklist-badge">Completed</div>
@@ -138,11 +118,14 @@
         </div>
         <div class="checklist-content">
           <div class="checklist-title">
-            {{ hasComplexes ? "Complex Created" : "Create Your First Complex" }}
+            {{
+              hasComplexes ? "Complexes Created" : "Create Your First Complex"
+            }}
           </div>
           <div class="checklist-description">
             <span *ngIf="!hasComplexes"
-              >Start by adding a residential complex to manage</span
+              >Add a residential complex (automatically creates a Complex
+              Admin)</span
             >
             <span *ngIf="hasComplexes"
               >You have {{ complexCount }} complex{{
@@ -182,7 +165,8 @@
           </div>
           <div class="checklist-description">
             <span *ngIf="!hasBuildings && hasComplexes"
-              >Add buildings to your residential complexes</span
+              >Add buildings to complexes (automatically creates Building
+              Admins)</span
             >
             <span *ngIf="!hasBuildings && !hasComplexes"
               >Create a complex first before adding buildings</span
@@ -205,58 +189,34 @@
         <div *ngIf="hasBuildings" class="checklist-badge">Completed</div>
       </div>
 
-      <!-- Step 4: Invite Team Members (Super Admin only) -->
-      <div
-        *ngIf="isSuperAdmin"
-        class="checklist-item"
-        [ngClass]="{
-          completed: hasMultipleAdmins,
-          pending: !hasMultipleAdmins
-        }"
-      >
-        <div class="checklist-icon">
-          <mat-icon>{{
-            hasMultipleAdmins ? "check_circle" : "radio_button_unchecked"
-          }}</mat-icon>
-        </div>
-        <div class="checklist-content">
-          <div class="checklist-title">
-            {{
-              hasMultipleAdmins ? "Team Members Added" : "Invite Team Members"
-            }}
-          </div>
-          <div class="checklist-description">
-            <span *ngIf="!hasMultipleAdmins"
-              >Add more admins to help manage the system</span
-            >
-            <span *ngIf="hasMultipleAdmins"
-              >You have {{ adminCount }} admin{{
-                adminCount !== 1 ? "s" : ""
-              }}
-              in your team</span
-            >
-          </div>
-        </div>
-        <button
-          *ngIf="!hasMultipleAdmins"
-          mat-raised-button
-          color="primary"
-          routerLink="/admins/create"
-        >
-          Invite
-        </button>
-        <div *ngIf="hasMultipleAdmins" class="checklist-badge">Completed</div>
-      </div>
-
       <!-- Celebration Message (When all done) -->
       <div *ngIf="isFullySetup" class="celebration-box">
         <mat-icon>celebration</mat-icon>
         <div>
           <strong>Congratulations!</strong>
           <p>
-            Your system is fully configured and ready to use. You can now manage
-            your residential complexes efficiently.
+            Your system is fully configured. You now have
+            {{ adminCount }} administrators managing
+            {{ complexCount }} complexes with {{ buildingCount }} buildings.
           </p>
+        </div>
+      </div>
+
+      <!-- Info Box about Admin Creation -->
+      <div class="info-box-section">
+        <mat-icon>info</mat-icon>
+        <div>
+          <strong>About Admin Creation</strong>
+          <ul>
+            <li>
+              <strong>Automatic:</strong> When you create a complex or building,
+              an admin is automatically created for it
+            </li>
+            <li *ngIf="isSuperAdmin">
+              <strong>Manual:</strong> As Super Admin, you can manually create
+              admins with specific roles using the "Create Admin" button
+            </li>
+          </ul>
         </div>
       </div>
     </div>

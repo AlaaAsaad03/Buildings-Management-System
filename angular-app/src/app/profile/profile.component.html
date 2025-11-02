@@ -1,0 +1,286 @@
+<app-layout title="My Profile" subtitle="Manage your account settings">
+  <div header-actions>
+    <button mat-stroked-button (click)="goToDashboard()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Dashboard
+    </button>
+  </div>
+
+  <div class="profile-container">
+    <!-- Profile Header Card -->
+    <mat-card class="profile-header">
+      <mat-card-content>
+        <div class="profile-header-content">
+          <div class="profile-avatar-section">
+            <div class="profile-avatar">
+              <span *ngIf="!profile.profile_picture">{{ getInitials() }}</span>
+              <img
+                *ngIf="profile.profile_picture"
+                [src]="profile.profile_picture"
+                alt="Profile Picture"
+                (error)="onImageError($event)"
+              />
+            </div>
+            <input
+              type="file"
+              #fileInput
+              accept="image/png,image/jpg,image/jpeg,image/gif,image/webp"
+              (change)="onProfilePictureChange($event)"
+              style="display: none"
+            />
+            <button mat-stroked-button (click)="fileInput.click()">
+              <mat-icon>photo_camera</mat-icon>
+              Change Photo
+            </button>
+          </div>
+
+          <div class="profile-info">
+            <h2>
+              {{ profile.civility }} {{ profile.first_name }}
+              {{ profile.last_name }}
+            </h2>
+            <div class="profile-meta">
+              <div class="meta-item">
+                <mat-icon>email</mat-icon>
+                <span>{{ profile.email }}</span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span
+                  class="role-badge"
+                  [ngClass]="{
+                    'super-admin': profile.role === 'Super Admin',
+                    'complex-admin': profile.role === 'Complex Admin',
+                    'building-admin': profile.role === 'Building Admin'
+                  }"
+                >
+                  {{ profile.role }}
+                </span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>event</mat-icon>
+                <span
+                  >Member since
+                  {{ profile.created_at | date : "mediumDate" }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabs for Profile Sections -->
+    <mat-tab-group class="profile-tabs">
+      <!-- Personal Information Tab -->
+      <mat-tab label="Personal Information">
+        <div class="tab-content">
+          <form (ngSubmit)="onUpdateProfile()">
+            <div class="form-section">
+              <h3>Basic Information</h3>
+
+              <div class="form-row two-columns">
+                <mat-form-field appearance="outline">
+                  <mat-label>Civility</mat-label>
+                  <mat-select [(ngModel)]="profile.civility" name="civility">
+                    <mat-option value="Mr">Mr</mat-option>
+                    <mat-option value="Ms">Ms</mat-option>
+                    <mat-option value="Mrs">Mrs</mat-option>
+                    <mat-option value="Dr">Dr</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="profile.phone"
+                    name="phone"
+                    type="tel"
+                  />
+                  <mat-icon matPrefix>phone</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row two-columns">
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="profile.first_name"
+                    name="first_name"
+                    required
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="profile.last_name"
+                    name="last_name"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput [value]="profile.email" disabled />
+                  <mat-icon matPrefix>email</mat-icon>
+                  <mat-hint>Email cannot be changed</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Account Information</h3>
+
+              <div class="form-row two-columns">
+                <mat-form-field appearance="outline">
+                  <mat-label>Role</mat-label>
+                  <input matInput [value]="profile.role" disabled />
+                  <mat-hint>Role is assigned by system administrators</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Status</mat-label>
+                  <input matInput [value]="profile.status" disabled />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="message error-message" *ngIf="errorMessage">
+              <mat-icon>error</mat-icon>
+              <span>{{ errorMessage }}</span>
+            </div>
+
+            <div class="message success-message" *ngIf="successMessage">
+              <mat-icon>check_circle</mat-icon>
+              <span>{{ successMessage }}</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+              <button mat-stroked-button type="button" routerLink="/dashboard">
+                Cancel
+              </button>
+              <button mat-raised-button color="primary" type="submit">
+                <mat-icon>save</mat-icon>
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+      <!-- Security Tab -->
+      <mat-tab label="Security">
+        <div class="tab-content">
+          <form (ngSubmit)="onChangePassword()">
+            <div class="form-section">
+              <h3>Change Password</h3>
+              <p class="section-description">
+                Ensure your password is strong and unique
+              </p>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Current Password</mat-label>
+                  <input
+                    matInput
+                    [type]="hideCurrentPassword ? 'password' : 'text'"
+                    [(ngModel)]="passwordForm.current_password"
+                    name="current_password"
+                    required
+                  />
+                  <!-- <mat-icon matPrefix>lock</mat-icon> -->
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="hideCurrentPassword = !hideCurrentPassword"
+                  >
+                    <mat-icon>{{
+                      hideCurrentPassword ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>New Password</mat-label>
+                  <input
+                    matInput
+                    [type]="hideNewPassword ? 'password' : 'text'"
+                    [(ngModel)]="passwordForm.new_password"
+                    name="new_password"
+                    required
+                  />
+                  <!-- <mat-icon matPrefix>vpn_key</mat-icon> -->
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="hideNewPassword = !hideNewPassword"
+                  >
+                    <mat-icon>{{
+                      hideNewPassword ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </button>
+                  <mat-hint>At least 6 characters</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Confirm New Password</mat-label>
+                  <input
+                    matInput
+                    [type]="hideConfirmPassword ? 'password' : 'text'"
+                    [(ngModel)]="passwordForm.confirm_password"
+                    name="confirm_password"
+                    required
+                  />
+                  <!-- <mat-icon matPrefix>vpn_key</mat-icon> -->
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="hideConfirmPassword = !hideConfirmPassword"
+                  >
+                    <mat-icon>{{
+                      hideConfirmPassword ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="message error-message" *ngIf="passwordError">
+              <mat-icon>error</mat-icon>
+              <span>{{ passwordError }}</span>
+            </div>
+
+            <div class="message success-message" *ngIf="passwordSuccess">
+              <mat-icon>check_circle</mat-icon>
+              <span>{{ passwordSuccess }}</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+              <button mat-raised-button color="primary" type="submit">
+                <mat-icon>security</mat-icon>
+                Change Password
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</app-layout>

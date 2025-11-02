@@ -1,9 +1,24 @@
 <app-layout title="Complexes" subtitle="Manage residential complexes">
   <div header-actions>
-    <button mat-raised-button color="primary" routerLink="/complexes/create">
+    <button
+      *ngIf="authService.can('create_complex')"
+      mat-raised-button
+      color="primary"
+      routerLink="/complexes/create"
+    >
       <mat-icon>add</mat-icon>
       Add Complex
     </button>
+  </div>
+
+  <div *ngIf="isBuildingAdmin && currentUserBuilding" class="info-banner">
+    <mat-icon>info</mat-icon>
+    <span
+      >You are assigned to: <strong>{{ currentUserBuilding.name }}</strong> in
+      <strong>{{
+        getComplexName(currentUserBuilding.complex_id)
+      }}</strong></span
+    >
   </div>
 
   <!-- Empty State -->
@@ -38,9 +53,13 @@
             <mat-icon>event</mat-icon>
             <span>{{ complex.campaign_start | date : "mediumDate" }}</span>
           </div>
-          <div class="meta-item">
+          <div class="meta-item" *ngIf="shouldShowBuildingCount(complex.id)">
             <mat-icon>business</mat-icon>
-            <span>{{ getBuildingCount(complex.id) }} Buildings</span>
+            <span
+              >{{ getBuildingCount(complex.id) }} Building{{
+                getBuildingCount(complex.id) !== 1 ? "s" : ""
+              }}</span
+            >
           </div>
         </div>
       </div>

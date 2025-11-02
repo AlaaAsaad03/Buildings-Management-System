@@ -6,6 +6,9 @@ class AdminRepository:
     def find_by_email(self, email):
         return Admin.query.filter_by(email=email).first()
     
+    def find_by_id(self, admin_id):
+        return Admin.query.get(admin_id)
+    
     # Get all admins, optionally filtered by search text + paginated
     def find_all(self, search=None, page=1, per_page=10):
         query = Admin.query

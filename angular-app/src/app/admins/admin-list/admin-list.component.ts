@@ -42,7 +42,7 @@ export class AdminListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isSuperAdmin = this.authService.isSuperAdmin();
+    this.isSuperAdmin = this.authService.hasRole('Super Admin');
     this.loadAdmins();
   }
 

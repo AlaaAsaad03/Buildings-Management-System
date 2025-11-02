@@ -16,6 +16,7 @@ class Admin(db.Model):
     status = db.Column(db.String(20), nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    profile_picture = db.Column(db.String(255), nullable=True)
 
     #Foreign Keys
     complex_id = db.Column(db.Integer, db.ForeignKey('complexes.id'), nullable=True)
@@ -32,6 +33,7 @@ class Admin(db.Model):
             'phone' : self.phone,
             'role' : self.role,
             'status' : self.status,
+            'profile_picture' : self.profile_picture,
             'created_at' : self.created_at.isoformat() if self.created_at else None
         }
 

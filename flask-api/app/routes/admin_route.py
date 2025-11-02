@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt
 from app.services.admin_service import AdminService
+from app.utils.decorators import super_admin_required
+
 
 bp = Blueprint('admin', __name__, url_prefix='/api/admins')
 admin_service = AdminService()
@@ -28,6 +30,7 @@ def get_admins():
 
 @bp.route('', methods=['POST'])
 @jwt_required()
+@super_admin_required()
 def create_admin():
     claims = get_jwt()
     creator_role = claims.get('role')
@@ -39,3 +42,20 @@ def create_admin():
         return jsonify({'error': error}), 403
     
     return jsonify(result), 201
+
+
+@bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
+def get_admin(id):
+    claims = get_jwt()
+    current_user_id = claims.get('id')
+    current_role = claims.get('role')
+
+    if current_role != 'super_admin' and current_user_id != id:
+        return jsonify({'error': 'Access denied'}), 403
+        
+    admin = admin_service.get_admin_by_id(id)
+    if not admin:
+            return jsonify({'error': 'Admin not found'}), 404
+    return jsonify(admin), 200
+          
