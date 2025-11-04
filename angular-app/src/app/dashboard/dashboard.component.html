@@ -1,131 +1,183 @@
-<app-layout title="Dashboard" subtitle="Welcome back! Here's what's happening.">
-  <!-- Stats Grid (unchanged) -->
+<app-layout title="Dashboard" subtitle="Welcome back! Here's your overview">
+  <!-- Stats Grid with Glassmorphism -->
   <div class="stats-grid">
-    <div class="stat-card" routerLink="/admins">
-      <div class="stat-icon purple">
-        <mat-icon>people</mat-icon>
+    <div class="stat-card glass-card stat-purple" routerLink="/admins">
+      <div class="stat-header">
+        <div class="stat-icon-wrapper purple">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-trend positive">
+          <mat-icon>trending_up</mat-icon>
+          <span>+12%</span>
+        </div>
       </div>
       <div class="stat-content">
-        <div class="stat-label">Total Admins</div>
         <div class="stat-value">{{ adminCount }}</div>
-        <div class="stat-change positive">
-          <mat-icon>trending_up</mat-icon>
-          <span>View all</span>
-        </div>
+        <div class="stat-label">Total Admins</div>
+        <div class="stat-description">Active system users</div>
+      </div>
+      <div class="stat-footer">
+        <span>View Details</span>
+        <mat-icon>arrow_forward</mat-icon>
       </div>
     </div>
 
-    <div class="stat-card" routerLink="/complexes">
-      <div class="stat-icon blue">
-        <mat-icon>location_city</mat-icon>
+    <div class="stat-card glass-card stat-blue" routerLink="/complexes">
+      <div class="stat-header">
+        <div class="stat-icon-wrapper blue">
+          <mat-icon>location_city</mat-icon>
+        </div>
+        <div class="stat-trend positive">
+          <mat-icon>trending_up</mat-icon>
+          <span>+8%</span>
+        </div>
       </div>
       <div class="stat-content">
-        <div class="stat-label">Complexes</div>
         <div class="stat-value">{{ complexCount }}</div>
-        <div class="stat-change positive">
-          <mat-icon>trending_up</mat-icon>
-          <span>View all</span>
-        </div>
+        <div class="stat-label">Complexes</div>
+        <div class="stat-description">Residential properties</div>
+      </div>
+      <div class="stat-footer">
+        <span>View Details</span>
+        <mat-icon>arrow_forward</mat-icon>
       </div>
     </div>
 
-    <div class="stat-card" routerLink="/buildings">
-      <div class="stat-icon green">
-        <mat-icon>business</mat-icon>
+    <div class="stat-card glass-card stat-green" routerLink="/buildings">
+      <div class="stat-header">
+        <div class="stat-icon-wrapper green">
+          <mat-icon>business</mat-icon>
+        </div>
+        <div class="stat-trend positive">
+          <mat-icon>trending_up</mat-icon>
+          <span>+15%</span>
+        </div>
       </div>
       <div class="stat-content">
-        <div class="stat-label">Buildings</div>
         <div class="stat-value">{{ buildingCount }}</div>
-        <div class="stat-change positive">
-          <mat-icon>trending_up</mat-icon>
-          <span>View all</span>
-        </div>
+        <div class="stat-label">Buildings</div>
+        <div class="stat-description">Total properties</div>
+      </div>
+      <div class="stat-footer">
+        <span>View Details</span>
+        <mat-icon>arrow_forward</mat-icon>
       </div>
     </div>
   </div>
 
-  <!-- Quick Actions -->
-  <div class="section">
-    <div class="section-header">
-      <h2 class="section-title">Quick Actions</h2>
-      <p class="section-subtitle">Tasks available based on your role</p>
-    </div>
-
-    <div class="action-cards">
-      <ng-container *ngFor="let action of quickActions">
-        <button
-          *ngIf="!action.permission || authService.can(action.permission)"
-          class="action-card"
-          [routerLink]="action.route"
-        >
-          <div class="action-icon" [ngClass]="action.color">
-            <mat-icon>{{ action.icon }}</mat-icon>
-          </div>
-          <div class="action-content">
-            <div class="action-title">{{ action.title }}</div>
-            <div class="action-description">{{ action.description }}</div>
-          </div>
-          <mat-icon class="action-arrow">arrow_forward</mat-icon>
-        </button>
-      </ng-container>
-    </div>
-  </div>
-
-  <!-- Getting Started - Updated -->
+  <!-- Quick Actions with Modern Cards -->
   <div class="section">
     <div class="section-header">
       <div>
-        <h2 class="section-title">Getting Started</h2>
-        <p class="section-subtitle">
-          <span *ngIf="!isFullySetup"
-            >Complete these steps to fully set up your system</span
-          >
-          <span *ngIf="isFullySetup"
-            >🎉 All set up! Your system is ready to use</span
-          >
-        </p>
-      </div>
-      <div class="progress-badge" [ngClass]="{ completed: isFullySetup }">
-        <mat-icon>{{ isFullySetup ? "check_circle" : "pending" }}</mat-icon>
-        <span>{{ completionPercentage }}% Complete</span>
+        <h2 class="section-title">
+          <mat-icon>bolt</mat-icon>
+          Quick Actions
+        </h2>
+        <p class="section-subtitle">Get things done faster</p>
       </div>
     </div>
 
-    <div class="checklist-card">
-      <!-- Step 1: Account Created (Always completed) -->
+    <div class="action-grid">
+      <button
+        *ngFor="let action of quickActions"
+        class="action-card glass-card"
+        [routerLink]="action.route"
+        [hidden]="action.permission && !authService.can(action.permission)"
+      >
+        <div class="action-icon-wrapper" [ngClass]="action.color">
+          <mat-icon>{{ action.icon }}</mat-icon>
+        </div>
+        <div class="action-content">
+          <h3>{{ action.title }}</h3>
+          <p>{{ action.description }}</p>
+        </div>
+        <div class="action-arrow">
+          <mat-icon>arrow_forward</mat-icon>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Getting Started Section -->
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">
+          <mat-icon>rocket_launch</mat-icon>
+          Getting Started
+        </h2>
+        <p class="section-subtitle">
+          <span *ngIf="!isFullySetup"
+            >Complete these steps to unlock full potential</span
+          >
+          <span *ngIf="isFullySetup">🎉 All set! You're ready to go</span>
+        </p>
+      </div>
+      <div class="progress-indicator">
+        <svg class="progress-ring" width="60" height="60">
+          <circle
+            class="progress-ring-circle-bg"
+            stroke="#e2e8f0"
+            stroke-width="4"
+            fill="transparent"
+            r="26"
+            cx="30"
+            cy="30"
+          />
+          <circle
+            class="progress-ring-circle"
+            [attr.stroke-dasharray]="163"
+            [attr.stroke-dashoffset]="163 - (163 * completionPercentage) / 100"
+            stroke="url(#gradient)"
+            stroke-width="4"
+            fill="transparent"
+            r="26"
+            cx="30"
+            cy="30"
+          />
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color: #667eea; stop-opacity: 1" />
+              <stop
+                offset="100%"
+                style="stop-color: #764ba2; stop-opacity: 1"
+              />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="progress-text">{{ completionPercentage }}%</div>
+      </div>
+    </div>
+
+    <div class="checklist-container glass-card">
+      <!-- Checklist items -->
       <div class="checklist-item completed">
-        <div class="checklist-icon">
+        <div class="checklist-icon completed">
           <mat-icon>check_circle</mat-icon>
         </div>
         <div class="checklist-content">
           <div class="checklist-title">Account Created</div>
-          <div class="checklist-description">
-            Your account is active and ready
-          </div>
+          <div class="checklist-description">Your admin account is active</div>
         </div>
-        <div class="checklist-badge">Completed</div>
+        <div class="checklist-badge completed">Completed</div>
       </div>
 
-      <!-- Step 2: Create Complex -->
       <div
         class="checklist-item"
         [ngClass]="{ completed: hasComplexes, pending: !hasComplexes }"
       >
-        <div class="checklist-icon">
+        <div class="checklist-icon" [ngClass]="{ completed: hasComplexes }">
           <mat-icon>{{
             hasComplexes ? "check_circle" : "radio_button_unchecked"
           }}</mat-icon>
         </div>
         <div class="checklist-content">
           <div class="checklist-title">
-            {{
-              hasComplexes ? "Complexes Created" : "Create Your First Complex"
-            }}
+            {{ hasComplexes ? "Complex Created" : "Create Your First Complex" }}
           </div>
           <div class="checklist-description">
             <span *ngIf="!hasComplexes"
-              >Add a residential complex (automatically creates a Complex
-              Admin)</span
+              >Add a residential complex to manage</span
             >
             <span *ngIf="hasComplexes"
               >You have {{ complexCount }} complex{{
@@ -135,17 +187,19 @@
           </div>
         </div>
         <button
-          *ngIf="!hasComplexes"
+          *ngIf="!hasComplexes && authService.can('create_complex')"
           mat-raised-button
           color="primary"
           routerLink="/complexes/create"
+          class="checklist-btn"
         >
           Create
         </button>
-        <div *ngIf="hasComplexes" class="checklist-badge">Completed</div>
+        <div *ngIf="hasComplexes" class="checklist-badge completed">
+          Completed
+        </div>
       </div>
 
-      <!-- Step 3: Add Buildings -->
       <div
         class="checklist-item"
         [ngClass]="{
@@ -154,7 +208,7 @@
           disabled: !hasComplexes
         }"
       >
-        <div class="checklist-icon">
+        <div class="checklist-icon" [ngClass]="{ completed: hasBuildings }">
           <mat-icon>{{
             hasBuildings ? "check_circle" : "radio_button_unchecked"
           }}</mat-icon>
@@ -165,11 +219,10 @@
           </div>
           <div class="checklist-description">
             <span *ngIf="!hasBuildings && hasComplexes"
-              >Add buildings to complexes (automatically creates Building
-              Admins)</span
+              >Add buildings to your complexes</span
             >
             <span *ngIf="!hasBuildings && !hasComplexes"
-              >Create a complex first before adding buildings</span
+              >Create a complex first</span
             >
             <span *ngIf="hasBuildings"
               >You have {{ buildingCount }} building{{
@@ -179,44 +232,30 @@
           </div>
         </div>
         <button
-          *ngIf="!hasBuildings && hasComplexes"
+          *ngIf="
+            !hasBuildings && hasComplexes && authService.can('create_building')
+          "
           mat-raised-button
           color="primary"
           routerLink="/buildings/create"
+          class="checklist-btn"
         >
           Add Building
         </button>
-        <div *ngIf="hasBuildings" class="checklist-badge">Completed</div>
+        <div *ngIf="hasBuildings" class="checklist-badge completed">
+          Completed
+        </div>
       </div>
 
-      <!-- Celebration Message (When all done) -->
+      <!-- Celebration -->
       <div *ngIf="isFullySetup" class="celebration-box">
         <mat-icon>celebration</mat-icon>
         <div>
           <strong>Congratulations!</strong>
           <p>
-            Your system is fully configured. You now have
-            {{ adminCount }} administrators managing
-            {{ complexCount }} complexes with {{ buildingCount }} buildings.
+            Your system is fully configured. Start managing your properties
+            efficiently!
           </p>
-        </div>
-      </div>
-
-      <!-- Info Box about Admin Creation -->
-      <div class="info-box-section">
-        <mat-icon>info</mat-icon>
-        <div>
-          <strong>About Admin Creation</strong>
-          <ul>
-            <li>
-              <strong>Automatic:</strong> When you create a complex or building,
-              an admin is automatically created for it
-            </li>
-            <li *ngIf="isSuperAdmin">
-              <strong>Manual:</strong> As Super Admin, you can manually create
-              admins with specific roles using the "Create Admin" button
-            </li>
-          </ul>
         </div>
       </div>
     </div>

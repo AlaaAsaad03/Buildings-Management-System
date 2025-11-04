@@ -1,68 +1,97 @@
 <div class="login-wrapper">
+  <!-- Animated Background -->
+  <div class="background-animation">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <!-- Login Container -->
   <div class="login-container">
-    <div class="login-header">
-      <div class="logo">
-        <mat-icon>apartment</mat-icon>
+    <div class="login-card">
+      <!-- Logo Section with Animation -->
+      <div class="logo-section">
+        <div class="logo-circle">
+          <mat-icon>apartment</mat-icon>
+        </div>
+        <h1 class="brand-name">BuildingHub</h1>
+        <p class="tagline">Smart Building Management System</p>
       </div>
-      <h1>Welcome Back</h1>
-      <p>Sign in to BuildingHub to continue</p>
+
+      <!-- Login Form -->
+      <form (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="modern-field">
+            <mat-label>Email Address</mat-label>
+            <input
+              matInput
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+            />
+            <mat-icon matPrefix class="field-icon">email</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="modern-field">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              [(ngModel)]="password"
+              name="password"
+              required
+              placeholder="Enter your password"
+            />
+            <mat-icon matPrefix class="field-icon">lock</mat-icon>
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hidePassword = !hidePassword"
+              class="visibility-btn"
+            >
+              <mat-icon>{{
+                hidePassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-alert" *ngIf="errorMessage">
+          <mat-icon>warning</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <!-- Login Button -->
+        <button mat-raised-button class="login-button" type="submit">
+          <span>Sign In</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </form>
     </div>
 
-    <form (ngSubmit)="onSubmit()" class="login-form">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          type="email"
-          [(ngModel)]="email"
-          name="email"
-          required
-          placeholder="super@admin.com"
-        />
-        <mat-icon matPrefix>email</mat-icon>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input
-          matInput
-          [type]="hidePassword ? 'password' : 'text'"
-          [(ngModel)]="password"
-          name="password"
-          required
-          placeholder="Enter your password"
-        />
-        <mat-icon matPrefix>lock</mat-icon>
-        <button
-          mat-icon-button
-          matSuffix
-          type="button"
-          (click)="hidePassword = !hidePassword"
-        >
-          <mat-icon>{{
-            hidePassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
-        </button>
-      </mat-form-field>
-
-      <div class="error-message" *ngIf="errorMessage">
-        <mat-icon>error</mat-icon>
-        {{ errorMessage }}
+    <!-- Features Section -->
+    <div class="features-section">
+      <div class="feature-card">
+        <mat-icon>dashboard</mat-icon>
+        <h3>Smart Dashboard</h3>
+        <p>Real-time insights and analytics</p>
       </div>
-
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        class="login-button"
-      >
-        Sign In
-      </button>
-    </form>
-
-    <!-- <div class="login-footer">
-      <span>Don't have an account?</span>
-      <a routerLink="/register">Create one</a>
-    </div> -->
+      <div class="feature-card">
+        <mat-icon>security</mat-icon>
+        <h3>Secure & Safe</h3>
+        <p>Enterprise-grade security</p>
+      </div>
+      <div class="feature-card">
+        <mat-icon>speed</mat-icon>
+        <h3>Lightning Fast</h3>
+        <p>Optimized performance</p>
+      </div>
+    </div>
   </div>
 </div>
