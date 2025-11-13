@@ -51,28 +51,30 @@
   <!-- Building Cards -->
   <div *ngIf="buildings.length > 0" class="building-grid">
     <div class="building-card" *ngFor="let building of buildings">
+      <!-- Building Header -->
       <div class="building-header">
-        <div class="building-icon">
-          <mat-icon>business</mat-icon>
+        <div class="building-icon-wrapper">
+          <div class="building-icon">
+            <mat-icon>business</mat-icon>
+          </div>
         </div>
-        <button
-          *ngIf="canDeleteBuilding"
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          class="building-menu"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="deleteBuilding(building.id)">
-            <mat-icon color="warn">delete</mat-icon>
-            <span>Delete</span>
+        <div *ngIf="canDeleteBuilding" class="building-menu">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
           </button>
-        </mat-menu>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="deleteBuilding(building.id)">
+              <mat-icon color="warn">delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </div>
       </div>
 
+      <!-- Building Title -->
       <h3 class="building-title">{{ building.name }}</h3>
 
+      <!-- Building Info -->
       <div class="building-info">
         <div class="info-item" *ngIf="building.address">
           <mat-icon>place</mat-icon>
@@ -86,7 +88,7 @@
 
         <div class="info-item">
           <mat-icon>schedule</mat-icon>
-          <span>{{ building.created_at | date : "mediumDate" }}</span>
+          <span>Created on {{ building.created_at | date : "MMM d, y" }}</span>
         </div>
       </div>
     </div>

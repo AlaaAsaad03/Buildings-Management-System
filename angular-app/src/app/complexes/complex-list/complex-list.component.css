@@ -1,154 +1,29 @@
-.empty-state {
-    text-align: center;
-    padding: 80px 20px;
-    background: white;
-    border: 2px dashed #e2e8f0;
-    border-radius: 12px;
-}
-
-.empty-state mat-icon {
-    font-size: 1rem;
-}
-
-.empty-state h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1e293b;
-    margin: 0 0 8px 0;
-}
-
-.empty-state p {
-    font-size: 1rem;
-    color: #64748b;
-    margin: 0 0 24px 0;
-}
-
-.complex-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
-}
-
-.complex-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    gap: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    align-items: flex-start;
-}
-
-.complex-card:hover {
-    border-color: #4f46e5;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
-    transform: translateY(-2px);
-}
-
-.complex-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.complex-icon mat-icon {
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
-    color: white;
-}
-
-.complex-content {
-    flex: 1;
-    min-width: 0;
-}
-
-.complex-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #0f172a;
-    margin: 0 0 8px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.complex-address {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #64748b;
-    font-size: 0.9rem;
-    margin-bottom: 12px;
-}
-
-.complex-address mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-}
-
-.complex-meta {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-}
-
-.meta-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #94a3b8;
-    font-size: 0.875rem;
-}
-
-.meta-item mat-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-}
-
-.complex-arrow {
-    color: #cbd5e0;
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    transition: all 0.2s;
-}
-
-.complex-card:hover .complex-arrow {
-    color: #4f46e5;
-    transform: translateX(4px);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .complex-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Existing styles... */
-
+/* Info Banner */
 .info-banner {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    border-radius: 8px;
-    margin-bottom: 24px;
-    color: #1e40af;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    margin-bottom: 32px;
+    color: #0c4a6e;
     font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .info-banner mat-icon {
@@ -160,6 +35,358 @@
 }
 
 .info-banner strong {
-    color: #1e3a8a;
+    color: #0c4a6e;
     font-weight: 600;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 120px 40px;
+    background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 100%);
+    border: 2px dashed #cbd5e1;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.empty-state::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.03) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.empty-state mat-icon {
+    font-size: 72px;
+    width: 72px;
+    height: 72px;
+    color: #cbd5e1;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.02em;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0 0 32px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.empty-state button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    padding: 12px 28px !important;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3) !important;
+    transition: all 0.3s ease !important;
+    position: relative;
+    z-index: 1;
+}
+
+.empty-state button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4) !important;
+}
+
+.empty-state button mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
+/* Complex Grid */
+.complex-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 24px;
+    animation: fadeInGrid 0.5s ease-out;
+}
+
+@keyframes fadeInGrid {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Complex Card */
+.complex-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+}
+
+.complex-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+    transform-origin: left;
+}
+
+.complex-card:hover::before {
+    transform: scaleX(1);
+}
+
+.complex-card:hover {
+    border-color: rgba(102, 126, 234, 0.3);
+    box-shadow:
+        0 12px 40px rgba(102, 126, 234, 0.12),
+        0 0 0 1px rgba(102, 126, 234, 0.05);
+    transform: translateY(-4px);
+}
+
+/* Card Header */
+.complex-card-header {
+    padding: 28px 28px 20px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.complex-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.complex-card:hover .complex-icon {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+}
+
+.complex-icon mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.complex-header-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.complex-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s;
+    letter-spacing: -0.01em;
+}
+
+.complex-card:hover .complex-title {
+    color: #667eea;
+}
+
+.complex-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    color: #64748b;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.complex-address mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: #94a3b8;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.complex-arrow {
+    color: #cbd5e1;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.complex-card:hover .complex-arrow {
+    color: #667eea;
+    transform: translateX(4px);
+}
+
+/* Card Footer */
+.complex-card-footer {
+    padding: 20px 28px 24px 28px;
+    display: flex;
+    gap: 24px;
+    background: linear-gradient(to bottom, #fafbfc 0%, #f8fafc 100%);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.meta-item mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #667eea;
+}
+
+.meta-item-label {
+    color: #94a3b8;
+    font-weight: 400;
+    margin-right: 4px;
+}
+
+/* Stagger Animation for Cards */
+.complex-card:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.complex-card:nth-child(2) {
+    animation-delay: 0.05s;
+}
+
+.complex-card:nth-child(3) {
+    animation-delay: 0.1s;
+}
+
+.complex-card:nth-child(4) {
+    animation-delay: 0.15s;
+}
+
+.complex-card:nth-child(5) {
+    animation-delay: 0.2s;
+}
+
+.complex-card:nth-child(6) {
+    animation-delay: 0.25s;
+}
+
+.complex-card {
+    animation: cardFadeIn 0.4s ease-out backwards;
+}
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .complex-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .empty-state {
+        padding: 80px 24px;
+    }
+
+    .empty-state mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+    }
+
+    .complex-card-header {
+        padding: 24px 20px 16px 20px;
+    }
+
+    .complex-card-footer {
+        padding: 16px 20px 20px 20px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .complex-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .complex-icon mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .complex-grid {
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    }
 }

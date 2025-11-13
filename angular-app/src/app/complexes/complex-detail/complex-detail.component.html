@@ -24,7 +24,7 @@
       <div class="info-grid">
         <div class="info-item">
           <mat-icon>location_city</mat-icon>
-          <div>
+          <div class="info-content">
             <div class="info-label">Complex Identity</div>
             <div class="info-value">{{ complex?.identity }}</div>
           </div>
@@ -32,7 +32,7 @@
 
         <div class="info-item">
           <mat-icon>place</mat-icon>
-          <div>
+          <div class="info-content">
             <div class="info-label">Address</div>
             <div class="info-value">{{ complex?.address }}</div>
           </div>
@@ -40,18 +40,18 @@
 
         <div class="info-item" *ngIf="complex?.campaign_start">
           <mat-icon>event</mat-icon>
-          <div>
+          <div class="info-content">
             <div class="info-label">Campaign Period</div>
             <div class="info-value">
-              {{ complex.campaign_start | date : "mediumDate" }} -
-              {{ complex.campaign_end | date : "mediumDate" }}
+              {{ complex.campaign_start | date : "MMM d, y" }} -
+              {{ complex.campaign_end | date : "MMM d, y" }}
             </div>
           </div>
         </div>
 
         <div class="info-item">
           <mat-icon>business</mat-icon>
-          <div>
+          <div class="info-content">
             <div class="info-label">Total Buildings</div>
             <div class="info-value">{{ buildings.length }}</div>
           </div>
@@ -68,7 +68,7 @@
   <!-- Empty State -->
   <div *ngIf="buildings.length === 0" class="empty-state">
     <mat-icon>business</mat-icon>
-    <h3>No buildings yet</h3>
+    <h3>No buildings available</h3>
     <p>Start by adding a building to this complex</p>
     <button mat-raised-button color="primary" routerLink="/buildings/create">
       <mat-icon>add</mat-icon>
@@ -79,36 +79,43 @@
   <!-- Building Cards -->
   <div *ngIf="buildings.length > 0" class="building-grid">
     <div class="building-card" *ngFor="let building of buildings">
+      <!-- Card Header -->
       <div class="building-header">
-        <div class="building-icon">
-          <mat-icon>business</mat-icon>
+        <div class="building-icon-wrapper">
+          <div class="building-icon">
+            <mat-icon>business</mat-icon>
+          </div>
         </div>
-        <button
-          *ngIf="canDeleteBuilding"
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          class="building-menu"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="deleteBuilding(building.id)">
-            <mat-icon>delete</mat-icon>
-            <span>Delete</span>
+        <div *ngIf="canDeleteBuilding" class="building-menu">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
           </button>
-        </mat-menu>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="deleteBuilding(building.id)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </div>
       </div>
 
-      <h3 class="building-title">{{ building.name }}</h3>
+      <!-- Card Content -->
+      <div class="building-content">
+        <h3 class="building-title">{{ building.name }}</h3>
 
-      <div class="building-address" *ngIf="building.address">
-        <mat-icon>place</mat-icon>
-        <span>{{ building.address }}</span>
-      </div>
+        <div class="building-details">
+          <div class="building-detail-item" *ngIf="building.address">
+            <mat-icon>place</mat-icon>
+            <span>{{ building.address }}</span>
+          </div>
 
-      <div class="building-date">
-        <mat-icon>schedule</mat-icon>
-        <span>Created {{ building.created_at | date : "mediumDate" }}</span>
+          <div class="building-detail-item">
+            <mat-icon>schedule</mat-icon>
+            <span
+              >Created on {{ building.created_at | date : "MMM d, y" }}</span
+            >
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Observable, BehaviorSubject } from "rxjs";
-import { tap } from "rxjs/operators";
+import { Observable, BehaviorSubject, throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
 
 
 export type Role = 'Super Admin' | 'Complex Admin' | 'Building Admin';
@@ -34,6 +34,7 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
       tap((response: any) => {
         localStorage.setItem('token', response.token);
+        localStorage.setItem('refresh_token', response.refresh_token);
         localStorage.setItem('user', JSON.stringify(response.admin));
         this.currentUserSubject.next(response.admin);
       })
@@ -42,14 +43,35 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
+  }
+  refreshToken(): Observable<any> {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) return throwError(() => new Error('No refresh token available'));
+
+    return this.http.post(`${this.apiUrl}/refresh`, {}, {
+      headers: { 'Authorization': `Bearer ${refreshToken}` }
+    }).pipe(
+      tap((res: any) => localStorage.setItem('token', res.token)),
+      catchError(err => {
+        this.logout();
+        return throwError(() => new Error('Session expired. Please log in again.'));
+      })
+    );
+  }
+  verifyToken(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/verify`);
   }
 
   //Helper Methods
   getToken(): string | null {
-    console.log(' token:', localStorage.getItem('token'));
     return localStorage.getItem('token');
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refresh_token');
   }
 
   isLoggedIn(): boolean {

@@ -1,5 +1,5 @@
 from app.repositories.admin_repo import AdminRepository
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 class AuthService:
 
@@ -24,7 +24,7 @@ class AuthService:
             return None, "Account is Inactive!"
         
         #create JWT Token with role
-        token = create_access_token(
+        access_token = create_access_token(
             identity = str(admin.id),
             additional_claims = {
                 'role' : admin.role,
@@ -33,8 +33,10 @@ class AuthService:
                 'building_id': admin.building_id
             }
         )
+        refresh_token = create_refresh_token(identity=str(admin.id))
 
         return { 
-            'token': token,
+            'token': access_token,
+            'refresh_token': refresh_token,
             'admin': admin.to_dict()
         }, None

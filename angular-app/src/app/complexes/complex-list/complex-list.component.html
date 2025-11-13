@@ -13,19 +13,17 @@
 
   <div *ngIf="isBuildingAdmin && currentUserBuilding" class="info-banner">
     <mat-icon>info</mat-icon>
-    <span
-      >You are assigned to: <strong>{{ currentUserBuilding.name }}</strong> in
-      <strong>{{
-        getComplexName(currentUserBuilding.complex_id)
-      }}</strong></span
-    >
+    <span>
+      You are assigned to: <strong>{{ currentUserBuilding.name }}</strong> in
+      <strong>{{ getComplexName(currentUserBuilding.complex_id) }}</strong>
+    </span>
   </div>
 
   <!-- Empty State -->
   <div *ngIf="complexes.length === 0" class="empty-state">
     <mat-icon>location_city</mat-icon>
-    <h3>No complexes yet</h3>
-    <p>Get started by creating your first residential complex</p>
+    <h3>No complexes available</h3>
+    <p>Create your first residential complex to get started</p>
     <button mat-raised-button color="primary" routerLink="/complexes/create">
       <mat-icon>add</mat-icon>
       Create Complex
@@ -39,31 +37,38 @@
       *ngFor="let complex of complexes"
       [routerLink]="['/complexes', complex.id]"
     >
-      <div class="complex-icon">
-        <mat-icon>location_city</mat-icon>
-      </div>
-      <div class="complex-content">
-        <h3 class="complex-title">{{ complex.identity }}</h3>
-        <div class="complex-address">
-          <mat-icon>place</mat-icon>
-          <span>{{ complex.address }}</span>
+      <!-- Card Header -->
+      <div class="complex-card-header">
+        <div class="complex-icon">
+          <mat-icon>location_city</mat-icon>
         </div>
-        <div class="complex-meta">
-          <div class="meta-item" *ngIf="complex.campaign_start">
-            <mat-icon>event</mat-icon>
-            <span>{{ complex.campaign_start | date : "mediumDate" }}</span>
-          </div>
-          <div class="meta-item" *ngIf="shouldShowBuildingCount(complex.id)">
-            <mat-icon>business</mat-icon>
-            <span
-              >{{ getBuildingCount(complex.id) }} Building{{
-                getBuildingCount(complex.id) !== 1 ? "s" : ""
-              }}</span
-            >
+        <div class="complex-header-content">
+          <h3 class="complex-title">{{ complex.identity }}</h3>
+          <div class="complex-address">
+            <mat-icon>place</mat-icon>
+            <span>{{ complex.address }}</span>
           </div>
         </div>
+        <mat-icon class="complex-arrow">arrow_forward</mat-icon>
       </div>
-      <mat-icon class="complex-arrow">arrow_forward</mat-icon>
+
+      <!-- Card Footer with Meta Info -->
+      <div class="complex-card-footer">
+        <div class="meta-item" *ngIf="complex.campaign_start">
+          <mat-icon>event</mat-icon>
+          <span>
+            <span class="meta-item-label">Started</span>
+            {{ complex.campaign_start | date : "MMM d, y" }}
+          </span>
+        </div>
+        <div class="meta-item" *ngIf="shouldShowBuildingCount(complex.id)">
+          <mat-icon>business</mat-icon>
+          <span>
+            {{ getBuildingCount(complex.id) }}
+            {{ getBuildingCount(complex.id) === 1 ? "Building" : "Buildings" }}
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </app-layout>
